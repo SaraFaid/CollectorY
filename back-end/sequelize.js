@@ -1,6 +1,7 @@
 // Impport the models
 const UserModel = require('./models/user');
 const CollectionModel = require('./models/collection');
+const LicenseModel = require('./models/license');
 const PostModel = require('./models/post');
 const LikeModel = require('./models/like');
 const CardModel = require('./models/card');
@@ -13,6 +14,7 @@ const mockedRoles = require('./mock/mockedRoles');
 const mockedRolesUsers = require('./mock/mockedRolesUsers');
 const mockedCollections = require('./mock/mockedCollections');
 const mockedCards = require('./mock/mockedCards');
+const mockedLicenses = require('./mock/mockedLicenses');
 
 // Sequelize
 const { Sequelize, DataTypes } = require('sequelize');
@@ -31,6 +33,7 @@ const verifyConnection = () => {
 // The models here
 const User = UserModel(sequelize, DataTypes);
 const Collection = CollectionModel(sequelize, DataTypes);
+const License = LicenseModel(sequelize, DataTypes);
 const Post = PostModel(sequelize, DataTypes);
 const Like = LikeModel(sequelize, DataTypes);
 const Card = CardModel(sequelize, DataTypes);
@@ -46,6 +49,9 @@ RoleUser.belongsTo(Role, {foreignKey: 'roleId' });
 
 User.hasMany(Collection, {foreignKey: 'userId' });
 Collection.belongsTo(User, {foreignKey: 'userId' });
+
+Collection.belongsTo(License, {foreignKey: 'licenseId' });
+License.hasMany(Collection, {foreignKey: 'licenseId' });
 
 Collection.hasMany(Card, {foreignKey: 'collectionId' });
 Card.belongsTo(Collection, {foreignKey: 'collectionId' });
@@ -76,6 +82,9 @@ const initDB = (synchronize) => {
             RoleUser.bulkCreate(mockedRolesUsers)
         })
         .then(() => {
+            License.bulkCreate(mockedLicenses)
+        })
+        .then(() => {
             Collection.bulkCreate(mockedCollections)
         })
         .then(() => {
@@ -89,4 +98,4 @@ const initDB = (synchronize) => {
 }
 
 
-module.exports = { verifyConnection, initDB, User, Collection, Post, Like, Card, Role, RoleUser }   
+module.exports = { verifyConnection, initDB, User, Collection, License, Post, Like, Card, Role, RoleUser }   

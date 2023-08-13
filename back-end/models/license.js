@@ -1,22 +1,14 @@
-//model for  collection (user_id, collection_name)
+// model for license of a collection (collection_id, license_id)
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('collections', {
-        id: {
+    return sequelize.define('licenses', {
+        id: { 
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
-        collectionName: {
+        licenseName: {
             type: DataTypes.STRING,
-            allowNull: false
-        },
-        licenseId: {
-            type: DataTypes.INTEGER,
             allowNull: false
         }
     }, {
