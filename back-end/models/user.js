@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        collectory: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
+        },
     }, {
         indexes: [
             {

@@ -7,6 +7,7 @@ import colors from "../components/colors";
 import StyledButton from "../components/StyledButton";
 import { RootStackParamList } from "../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import findUser from "../utils/utils";
 
 type LogInProps = NativeStackScreenProps<RootStackParamList, "LogIn">;
 
@@ -14,9 +15,6 @@ const LogIn: React.FC<LogInProps> = (props) => {
   // variables useStates
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const trueEmail = "griff.faidh@gmail.com";
-  const truePassword = "12345678";
 
   // variables error
   const [errorEmailFormat, setErrorEmailFormat] = useState(false);
@@ -36,15 +34,14 @@ const LogIn: React.FC<LogInProps> = (props) => {
     ) {
       setErrorEmailFormat(true);
     } else {
-        if (password !== truePassword || email !== trueEmail) {
-            setErrorNotGoodInfos(true);
+      const request = findUser(email, password);
+        if (request !== undefined) {
+          const userfound = request;
+          props.navigation.navigate("SocialHome");
+          
         } else {
-            //props.navigation.navigate("Home", { email: email });
-            Alert.alert(
-            "Logged In",
-            `You have successfully logged to your account, ${email}.`
-            );
-        }
+            setErrorNotGoodInfos(true);
+          }
     }
   };
 

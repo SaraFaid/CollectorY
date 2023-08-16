@@ -1,10 +1,11 @@
 // UI for the sign up in the application
 
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Alert } from "react-native";
 import styles from "../components/style";
 import colors from "../components/colors";
 import StyledButton from "../components/StyledButton";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 
@@ -12,9 +13,12 @@ type SignUpProps = NativeStackScreenProps<RootStackParamList, "SignUp">;
 
 const SignUp: React.FC<SignUpProps> = (props) => {
   // variables useStates
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [collectory, setCollectory] = useState(false);
+  const [terms, setTerms] = useState(false);
 
   // variables error
   const [errorPassword, setErrorPassword] = useState(false);
@@ -24,7 +28,7 @@ const SignUp: React.FC<SignUpProps> = (props) => {
     useState(false);
 
   const checkInputsFilled = () => {
-    if (email === "" || password === "" || confirmPassword === "") {
+    if (email === "" || password === "" || confirmPassword === "" || username === "" || !terms) {
       return true;
     } else return false;
   };
@@ -41,7 +45,7 @@ const SignUp: React.FC<SignUpProps> = (props) => {
       if (password === confirmPassword) {
         Alert.alert(
           "Signed Up",
-          `You have successfully created your account, ${email}.`
+          `You have successfully created your account, ${username}.`
         );
         props.navigation.navigate("LogIn");
       } else {
@@ -73,6 +77,13 @@ const SignUp: React.FC<SignUpProps> = (props) => {
           Please enter your email address and password to create an account.
         </Text>
         <View style={styles.separator}>
+        <TextInput
+            style={styles.textInput}
+            placeholder="Username"
+            inputMode="text"
+            textContentType="username"
+            onChangeText={(text) => setUsername(text)}
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Email address"
@@ -123,16 +134,24 @@ const SignUp: React.FC<SignUpProps> = (props) => {
           ) : (
             <></>
           )}
-          <Text style={styles.smallTextContent}>
-            By clicking on Sign Up, you agree to our Terms of Service and
-            Privacy Policy.
-          </Text>
+
+            <View style={styles.viewRow}>
+              <BouncyCheckbox style={{alignSelf: 'center'}} size={25} fillColor={colors.secondary} innerIconStyle={{borderWidth: 4}} disableText onPress={() => {setCollectory(!collectory)}}/>
+              <Text style={styles.textContent}>Want to become a member of the CollectorY community?</Text>
+            </View>
+            <View style={styles.viewRow}>
+
+              <BouncyCheckbox style={{alignSelf: 'center'}} size={25} fillColor={colors.dark} innerIconStyle={{borderWidth: 4}} disableText onPress={() => {setTerms(!terms)}}/>
+              <Text style={styles.smallTextContent}>
+              By clicking on Sign Up, you agree to our Terms of Service and Privacy Policy.
+              </Text>
+            </View>
           <StyledButton
             title="Sign Up"
-            color={colors.dark}
+            color={colors.secondary}
             disabled={checkInputsFilled()}
             onPress={onClickSignUp}
-          />
+            />
         </View>
       </View>
     </View>

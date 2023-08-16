@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "emailAddress": "beo.san@outlook.be",
+      "passwordDigest": "12345678",
+      "username": "Beosan",
+      "collectory": true
+    },
+    {
+      "id": 2,
+      "emailAddress": "griff.faidh@gmail.com",
+      "passwordDigest": "12345678",
+      "username": "Griff",
+      "collectory": false
+    },
+    {
+      "id": 3,
+      "emailAddress": "francis.lembrouille@poutpout.be",
+      "passwordDigest": "12345678",
+      "username": "Francis",
+      "collectory": true
+    }
+  ]
+
