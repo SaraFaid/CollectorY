@@ -4,9 +4,14 @@ import colors from './colors';
 const styles = StyleSheet.create({
     // base styles
     container: {
-      flex: 1,
+        flex: 1,
       backgroundColor: colors.primary,
-      alignItems: 'center',
+        alignItems: 'center',
+    },
+
+    scrollContainer: {
+        backgroundColor: colors.primary,
+        minHeight: '100%',
     },
 
     viewRow: {
@@ -23,15 +28,18 @@ const styles = StyleSheet.create({
         backgroundColor: colors.light,
         alignItems: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
         borderRadius: 10,
         padding: 20,
         marginVertical: 20,
+        paddingBottom: 80,
     },
     titleContent: {
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.dark,
         marginVertical: 20,
+        alignSelf: 'center',
     },
     textContent: {
         fontSize: 16,
@@ -105,7 +113,59 @@ const styles = StyleSheet.create({
     separator: {
         width: '100%',
         marginTop: 30,
-    }
+    },
+
+    //post
+    post: {
+        width: '100%',
+        backgroundColor: colors.primary,
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 20,
+    },
+    postAuthor: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.dark,
+        marginVertical: 5,
+        backgroundColor: colors.light,
+        width: '50%',
+        borderRadius: 10,
+        padding: 5,
+    },
+    postContent: {
+        fontSize: 16,
+        fontWeight: 'normal',
+        color: colors.dark,
+        marginVertical: 5,
+        fontStyle: 'italic',
+    },
+    postImage: {
+        flex: 1,
+        height: 150,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        margin: 5,
+    },
+    postTextImage: {
+        color: 'white',
+        fontSize: 16,
+        lineHeight: 21,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        backgroundColor: '#000000c0',
+        width: '100%',
+    },
+
+    // cards styles
+    card: {
+        flex: 1,
+        height: 230,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        margin: 5,
+        maxWidth: '33%',
+    },
 
   });
 

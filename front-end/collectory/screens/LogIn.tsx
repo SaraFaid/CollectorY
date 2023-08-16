@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, Alert } from "react-native";
-import styles from "../components/style";
-import colors from "../components/colors";
-import StyledButton from "../components/StyledButton";
+import styles from "../components/styling/style";
+import colors from "../components/styling/colors";
+import StyledButton from "../components/buttons/StyledButton";
 import { RootStackParamList } from "../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import findUser from "../utils/utils";
@@ -37,7 +37,7 @@ const LogIn: React.FC<LogInProps> = (props) => {
       const request = findUser(email, password);
         if (request !== undefined) {
           const userfound = request;
-          props.navigation.navigate("SocialHome");
+          props.navigation.navigate("MainHome");
           
         } else {
             setErrorNotGoodInfos(true);

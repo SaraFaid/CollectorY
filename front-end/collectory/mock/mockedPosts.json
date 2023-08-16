@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "userId": 1,
+        "content": "This is a test comment",
+        "cardId": "swsh4-1"
+    },
+    {
+        "id": 2,
+        "userId": 2,
+        "content": "This is a test comment",
+        "cardId": "swsh4-2"
+    },
+    {
+        "id": 3,
+        "userId": 3,
+        "content": "This is a test comment",
+        "cardId": "swsh4-3"
+    }
+]
