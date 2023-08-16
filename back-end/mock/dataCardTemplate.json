@@ -1,0 +1,97 @@
+{
+  "data": {
+    "id": "dp4-3",
+    "name": "Darkrai",
+    "supertype": "Pokémon",
+    "subtypes": ["Basic"],
+    "level": "38",
+    "hp": "70",
+    "types": ["Darkness"],
+    "attacks": [
+      {
+        "name": "Reach Over",
+        "cost": [],
+        "convertedEnergyCost": 0,
+        "damage": "",
+        "text": "Search your deck for an Energy card, show it to your opponent, and put it into your hand. Shuffle your deck afterward."
+      },
+      {
+        "name": "Darkness Pursuit",
+        "cost": ["Darkness", "Darkness", "Darkness"],
+        "convertedEnergyCost": 3,
+        "damage": "50",
+        "text": "If the Defending Pokémon is Cresselia, this attack's base damage is 100."
+      }
+    ],
+    "weaknesses": [{ "type": "Fighting", "value": "+20" }],
+    "resistances": [{ "type": "Psychic", "value": "-20" }],
+    "retreatCost": ["Colorless"],
+    "convertedRetreatCost": 1,
+    "set": {
+      "id": "dp4",
+      "name": "Great Encounters",
+      "series": "Diamond & Pearl",
+      "printedTotal": 106,
+      "total": 106,
+      "legalities": { "unlimited": "Legal" },
+      "ptcgoCode": "GE",
+      "releaseDate": "2008/02/01",
+      "updatedAt": "2018/03/04 10:35:00",
+      "images": {
+        "symbol": "https://images.pokemontcg.io/dp4/symbol.png",
+        "logo": "https://images.pokemontcg.io/dp4/logo.png"
+      }
+    },
+    "number": "3",
+    "artist": "Masakazu Fukuda",
+    "rarity": "Rare Holo",
+    "flavorText": "It can lull people to sleep and make them dream. It is active during nights of the new moon.",
+    "nationalPokedexNumbers": [491],
+    "legalities": { "unlimited": "Legal" },
+    "images": {
+      "small": "https://images.pokemontcg.io/dp4/3.png",
+      "large": "https://images.pokemontcg.io/dp4/3_hires.png"
+    },
+    "tcgplayer": {
+      "url": "https://prices.pokemontcg.io/tcgplayer/dp4-3",
+      "updatedAt": "2023/08/11",
+      "prices": {
+        "holofoil": {
+          "low": 5.45,
+          "mid": 9.0,
+          "high": 12.0,
+          "market": 10.97,
+          "directLow": null
+        },
+        "reverseHolofoil": {
+          "low": 5.0,
+          "mid": 8.21,
+          "high": 13.84,
+          "market": 13.84,
+          "directLow": null
+        }
+      }
+    },
+    "cardmarket": {
+      "url": "https://prices.pokemontcg.io/cardmarket/dp4-3",
+      "updatedAt": "2023/08/11",
+      "prices": {
+        "averageSellPrice": 5.14,
+        "lowPrice": 0.75,
+        "trendPrice": 5.31,
+        "germanProLow": 0.0,
+        "suggestedPrice": 0.0,
+        "reverseHoloSell": 1.99,
+        "reverseHoloLow": 0.99,
+        "reverseHoloTrend": 2.66,
+        "lowPriceExPlus": 2.99,
+        "avg1": 2.0,
+        "avg7": 4.46,
+        "avg30": 4.54,
+        "reverseHoloAvg1": 1.99,
+        "reverseHoloAvg7": 3.33,
+        "reverseHoloAvg30": 5.84
+      }
+    }
+  }
+}

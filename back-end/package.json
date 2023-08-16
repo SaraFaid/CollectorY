@@ -16,6 +16,7 @@
     "express": "^4.18.2",
     "pg": "^8.11.2",
     "pg-hstore": "^2.3.4",
+    "pokemontcgsdk": "^2.0.0",
     "sequelize": "^6.32.1"
   }
 }
