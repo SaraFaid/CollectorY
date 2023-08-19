@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import styles from "../components/styling/style";
 import React from "react";
 import SocialHome from "../components/homeScreens/SocialHome";
@@ -51,7 +51,7 @@ const MainHome: React.FC<MainHomeProps> = (props) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.backBar}>
         <LogoButton
           name="collectory"
@@ -74,7 +74,7 @@ const MainHome: React.FC<MainHomeProps> = (props) => {
           onPress={() => onPress("profile")}
         />
       </View>
-      <ScrollView style={styles.scrollContainer}>{fillScreen(selected)}</ScrollView>
+      <View style={styles.safeAreaViewContent}>{fillScreen(selected)}</View>
     </View>
   );
 };

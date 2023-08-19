@@ -1,12 +1,11 @@
-import { View, Text, TextInput, SafeAreaView, SectionList, SectionListData } from "react-native";
-import styles from "../styling/style";
-import React from "react";
-import License from "../cardLayouts/License";
-import CardsList from "../cardLayouts/CardsList"
+import React, { useEffect } from "react";
+import { FlatList, SafeAreaView, SectionList, Text, TextInput, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import Set from "../cardLayouts/Set";
+import { getSets } from "../../services/pokemonAPI";
+import CardsList from "../cardLayouts/CardsList";
+import License from "../cardLayouts/License";
 import colors from "../styling/colors";
-import dataBlocks from "../../mock/mockedBlocks.json"
+import styles from "../styling/style";
 
 const CardsHome = () => {
 
@@ -19,75 +18,98 @@ const CardsHome = () => {
     const [isSetPressed, setIsSetPressed] = React.useState(false);
     const [choosenSet, setChoosenSet] = React.useState("")
 
+    if (!isSetPressed && choosenSet !== "") { setChoosenSet("") }
+
     const onLicensePress = (id: string) => {
         console.log("pressed");
         // get the id of the license and send back to the list of cards of that license
         
         switch (id) {
-            case "pokemon":
+            case "Pokémon":
                 setIsPokemonPressed(true);
                 break;
-            case "yugioh":
+            case "Yu-Gi-Oh":
                 setIsYugiohPressed(true);
                 break;
-            case "magic":
+            case "Magic The Gathering":
                 setIsMagicPressed(true);
                 break;
-            case "naruto":
+            case "Naruto":
                 setIsNarutoPressed(true);
                 break;
             default:
                 break;
         }
-
-
     }
 
-    const id1 = "pokemon";
-    const id2 = "yugioh";
-    const id3 = "magic";
-    const id4 = "naruto";
+    //LICENSES
+    const id1 = "Pokémon";
+    const id2 = "Yu-Gi-Oh";
+    const id3 = "Magic The Gathering";
+    const id4 = "Naruto";
 
 
-    let blocks: { title: string; data: string[]; }[] = []
-
-    dataBlocks.forEach(block => {
-        if (blocks.filter(b => b.title === block.series).length === 0)
+    const dataLicenses = [
         {
-            blocks.push({title: block.series, data: [block.name]})
-        }else{
-            blocks.filter(b => b.title === block.series)[0].data.push(block.name)
-        }
-    })
+            name: id1,
+            image: require("../../assets/logos/Pokémon_TCG.png"),
+        },
+        {
+            name: id2,
+            image: require("../../assets/logos/Yu_Gi_Oh_TCG.png"),
+        },
+        {
+            name: id3,
+            image: require("../../assets/logos/Magic_The_Gathering_TCG.png"),
+        },
+        {
+            name: id4,
+            image: require("../../assets/logos/Naruto_TCG.png"),
+        },
+    ]
 
-    const [isBlock1Pressed, setIsBlock1Pressed] = React.useState(false);
-    const [isBlock2Pressed, setIsBlock2Pressed] = React.useState(false);
-    const [isBlock3Pressed, setIsBlock3Pressed] = React.useState(false);
-    const [isBlock4Pressed, setIsBlock4Pressed] = React.useState(false);
+
+    // BLOCKS AND SETS
+    const [blocks, setBlocks] = React.useState<{ title: string; data: string[]; }[]>([]);
+    const [sets, setSets] = React.useState<{ id: string, name: string }[]>([]);
+    const [openedBlocks] = React.useState<string[]>([]);
+
+    const request = async () => { await getSets()
+        .then((sets) => {
+            let tmp: { title: string, data: string[] }[] = []
+            sets.forEach((set: any) => {
+                if (tmp.filter((b) => b.title === set.series).length === 0)
+                {
+                    tmp.push({title: set.series, data: [set.name]});
+                }else{
+                    const indexChange = tmp.findIndex((b) => b.title === set.series)
+                    if(indexChange >= 0) tmp[indexChange].data.push(set.name)
+                    else tmp.push({title: set.series, data: [set.name]});
+                }
+                setSets((sets) => [...sets, {id: set.id, name: set.name}]);
+            })
+            setBlocks(tmp)
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    }
+
+    useEffect(() => {
+        request();
+    }, [])
+
 
     let index = 0
 
-    const onToggleSet = (title: String) => {
-        switch (title) {
-            case "Base":
-                setIsBlock1Pressed(!isBlock1Pressed);
-                break;
-            case "Gym":
-                setIsBlock2Pressed(!isBlock2Pressed);
-                break;
-            case "Neo":
-                setIsBlock3Pressed(!isBlock3Pressed);
-                break;
-            case "Other":
-                setIsBlock4Pressed(!isBlock4Pressed);
-            default:
-                break;
-        }
+    const onToggleSet = (title: string) => {
+        openedBlocks.find((b) => b === title) ? openedBlocks.splice(openedBlocks.indexOf(title), 1) : openedBlocks.push(title);
     }
 
     const onSetPress = (set: string) => {
+        const setID = sets.filter(s => s.name === set)[0].id;
         setIsSetPressed(true);
-        setChoosenSet(set);
+        setChoosenSet(setID);
     }
 
     return (
@@ -96,7 +118,6 @@ const CardsHome = () => {
             isPokemonPressed || isYugiohPressed || isMagicPressed || isNarutoPressed?
             isSetPressed? <Icon name='keyboard-backspace' size={30} color={colors.dark} onPress={() => {
                 setIsSetPressed(false);
-                setChoosenSet("");
             }}/> :
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems:'center'}}>
 
@@ -108,7 +129,7 @@ const CardsHome = () => {
                 }}/>
             <TextInput
             style={styles.researchInput}
-            placeholder="Pokemon name"
+            placeholder="Card name"
             inputMode="text"
             textContentType="name"
             onChangeText={(text) => setResearch(text)}
@@ -120,30 +141,27 @@ const CardsHome = () => {
         }
                 {!isPokemonPressed && !isYugiohPressed && !isMagicPressed && !isNarutoPressed?
                 <View style={styles.largeContent}>
-                    <View style={{flexDirection: "row", alignItems: 'center'}} key={1}>
-                        <License idLicense={id1} onPress={() => onLicensePress(id1)}/>
-                        <License idLicense={id2} onPress={() => onLicensePress(id2)} />
-                    </View>
-                    <View style={{flexDirection: "row", alignItems: 'center'}} key={2}>
-                        <License idLicense={id3} onPress={() => onLicensePress(id3)}/>
-                        <License idLicense={id4} onPress={() => onLicensePress(id4)}/>
-                    </View>
-                </View> :
-                isSetPressed? <CardsList idSet={choosenSet}/> :
+                    <FlatList data={dataLicenses} renderItem={({item}) => <License idLicense={item.name} image={item.image} onPress={() => onLicensePress(item.name)}/>} keyExtractor={item => item.name} numColumns={2}/>
+                </View>
+                :
+                isSetPressed? <CardsList idSet={choosenSet} nameSet={sets.find((set) => set.id === choosenSet)?.name}/>
+                :
                 <SafeAreaView style={styles.largeContent}>
                 <SectionList sections={blocks} keyExtractor={(item, index) => item + index} renderItem={
                     ({section}) => 
                     {
                         index ++;
                         if( index > section.data.length) index = 1;
-                        if ((isBlock1Pressed && section.title === "Base") || (isBlock2Pressed && section.title === "Gym") || (isBlock3Pressed && section.title === "Neo")) return <Text style={styles.setText} onPress={() => onSetPress(section.data[index - 1])}>{section.data[index - 1]}</Text>
+                        if (openedBlocks.find((b) => b === section.title)) {
+                            const tmp = section.data[index-1];
+                            return <Text style={styles.setText} onPress={() => onSetPress(tmp)}>{tmp}</Text>
+                        }
                         else return <></>;
                     }
                 } 
                 renderSectionHeader={({section}) => <Text style={styles.blockText} onPress={() => onToggleSet(section.title)}>{section.title}</Text>
                 }/>
             </SafeAreaView>
-                //<CardsList idLicense= {isPokemonPressed? id1 : isYugiohPressed? id2 : isMagicPressed? id3 : id4} />
                 }
             
         </>

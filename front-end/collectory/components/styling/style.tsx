@@ -44,7 +44,19 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         marginVertical: 20,
+        paddingBottom: 120,
     },
+
+    safeAreaViewContent: {
+        width: '90%',
+        minHeight: '50%',
+        backgroundColor: colors.light,
+        alignSelf: 'center',
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 20,
+    },
+
     darkLargeContent: {
         width: '95%',
         backgroundColor: colors.dark,
@@ -209,7 +221,7 @@ const styles = StyleSheet.create({
 
     license: {
         flex: 1,
-        height: 120,
+        height: 150,
         alignItems: 'center',
         justifyContent: 'flex-end',
         margin: 5,
@@ -237,6 +249,9 @@ const styles = StyleSheet.create({
         padding: 15,
         marginLeft: 40,
         borderRadius: 15,
+    },
+    hiddensetText: {
+        display: 'none',
     },
 
   });

@@ -1,57 +1,46 @@
-import { ScrollView, View, Text } from "react-native";  
 import React from "react";
+import { FlatList, SafeAreaView, Text } from "react-native";
+import { getCardsFromSetID } from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "./Card";
-import dataCards from "../../mock/mockedCards.json"
-import colors from "../styling/colors";
 
 type CardsListProps = {
     idSet: string;
+    nameSet: string | undefined;
 }
 
-const CardsList = ({idSet}: CardsListProps ) => {
+const CardsList = ({idSet, nameSet}: CardsListProps ) => {
 
+    const [cards, setCards] = React.useState<{
+        id: string;
+        name: string;
+        image: string;
+    }[]>([]);
 
-    // const filledList = () => {
-    //     let index = 0;
-    //     const result = dataCards.map((card) => {
-    //         while(index <3) {
-    //         }
+    const request = async () => {await getCardsFromSetID(idSet)
+        .then((set) => {
+            set.map((card: any) => {
+                        const tmp = {id: card.id, name: card.name, image: card.images.small}
+                        setCards((cards) => [...cards, tmp]);
+                 })
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+
+    }
+
+    if(cards.length === 0) {
+        request();
+    }
 
     return (
-            <View style={styles.darkLargeContent}>
-                <Text style={styles.darkTitleContent}>{idSet}</Text>
-                <View style={{flexDirection: "row", width: '100%'}} key={1}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-                <View style={{flexDirection: "row", width: '100%'}} key={2}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-                <View style={{flexDirection: "row", width: '100%'}} key={3}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-                <View style={{flexDirection: "row", width: '100%'}} key={4}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-                <View style={{flexDirection: "row", width: '100%'}} key={5}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-                <View style={{flexDirection: "row", width: '100%'}} key={6}>
-                <Card />
-                <Card />
-                <Card />
-                </View>
-            </View>
+            <SafeAreaView style={styles.darkLargeContent}>
+                <Text style={styles.darkTitleContent}>{nameSet}</Text>
+                {cards.length !== 0? <FlatList data={cards} renderItem={({item}) => <Card image={item.image} cardName={item.name} cardId={item.id}/>} keyExtractor={(item) => item.id} numColumns={3} />
+                : <Text style={styles.darkTitleContent}>Loading . . .</Text>
+                }
+            </SafeAreaView>
     )
 }
 

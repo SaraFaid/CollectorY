@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground } from "react-native";
+import { View, Text, ImageBackground, ScrollView } from "react-native";
 import styles from "../styling/style";
 import React from "react";
 import dataPosts from "../../mock/mockedPosts.json"
@@ -38,12 +38,12 @@ const SocialHome = () => {
     }
 
     return (
-        <>
+        <ScrollView>
             <Text style={styles.titleContent}>Your friends' feed HERE</Text>
-            <View style={styles.content}>
+            <View style={styles.largeContent}>
                 {fillFeed()}
             </View>
-        </>
+        </ScrollView>
     )
 }
 
