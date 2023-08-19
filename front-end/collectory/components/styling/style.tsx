@@ -12,6 +12,8 @@ const styles = StyleSheet.create({
     scrollContainer: {
         backgroundColor: colors.primary,
         minHeight: '100%',
+        width: '100%',
+        borderRadius: 10,
     },
 
     viewRow: {
@@ -34,10 +36,35 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         paddingBottom: 80,
     },
+    largeContent: {
+        width: '90%',
+        backgroundColor: colors.light,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 20,
+    },
+    darkLargeContent: {
+        width: '95%',
+        backgroundColor: colors.dark,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        borderRadius: 15,
+        padding: 10,
+        marginVertical: 20,
+    },
     titleContent: {
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.dark,
+        marginVertical: 20,
+        alignSelf: 'center',
+    },
+    darkTitleContent: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: colors.light,
         marginVertical: 20,
         alignSelf: 'center',
     },
@@ -75,6 +102,19 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 10,
         
+    },
+
+    researchInput: {    
+        width: '90%',
+        height: 40,
+        backgroundColor: colors.light,
+        borderColor: colors.dark,
+        borderWidth: 2,
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 10,
+        alignSelf: 'center',
+        marginLeft: 5,
     },
 
     // button styles
@@ -160,11 +200,43 @@ const styles = StyleSheet.create({
     // cards styles
     card: {
         flex: 1,
-        height: 230,
+        height: 160,
         alignItems: 'center',
         justifyContent: 'flex-end',
         margin: 5,
         maxWidth: '33%',
+    },
+
+    license: {
+        flex: 1,
+        height: 120,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        margin: 5,
+    },
+
+    blockText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.light,
+        marginVertical: 5,
+        backgroundColor: colors.dark,
+        width: '100%',
+        textAlign: 'left',
+        padding: 15,
+        borderRadius: 15,
+    },
+
+    setText: {
+        fontSize: 14,
+        fontWeight: 'normal',
+        color: colors.light,
+        marginVertical: 5,
+        backgroundColor: colors.secondary,
+        textAlign: 'left',
+        padding: 15,
+        marginLeft: 40,
+        borderRadius: 15,
     },
 
   });
