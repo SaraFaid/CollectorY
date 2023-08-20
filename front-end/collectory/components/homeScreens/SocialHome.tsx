@@ -1,39 +1,48 @@
 import { View, Text, ImageBackground, ScrollView } from "react-native";
 import styles from "../styling/style";
-import React from "react";
+import React, { useEffect } from "react";
 import dataPosts from "../../mock/mockedPosts.json"
 import dataUsers from "../../mock/mockedUsers.json"
+import { getCardByID } from "../../services/pokemonAPI";
 
 
 const SocialHome = () => {
 
-    const fillFeed = () => {
-        const result = dataPosts.map((post) => {
-            let url = require("../../mock/images/pikachu.jpg")
+    const [posts, setPosts] = React.useState<{author: string, content: string, cardId: string, cardName: string, cardImage: string}[]>([])
 
-            if(post.cardId === "swsh4-1") {
-                url = require("../../mock/images/pikachu.jpg")
-            }
-            else if(post.cardId === "swsh4-2") {
-                url = require("../../mock/images/venusaur-1.jpg")
-            }
-            else if(post.cardId === "swsh4-3") {
-                url = require("../../mock/images/venusaur-2.jpg")
-            }
-
-            const author = dataUsers.filter((user) => user.id === post.userId)[0].username
-
-            return (
-                <View style={styles.post} key={post.id}>
-                    <Text style={styles.postAuthor}>{author}</Text>
-                    <Text style={styles.postContent}>{post.content}</Text>
-                    <ImageBackground source={url} style={styles.postImage} resizeMode="cover">
-                        <Text style={styles.postTextImage}>{post.cardId}</Text>
-                    </ImageBackground>
-                </View>
+    const getPosts = () => {
+        const result = dataPosts.map(async (mockPost) => {
+            const author = dataUsers.filter((user) => user.id === mockPost.userId)[0].username
+            await getCardByID(mockPost.cardId)
+            .then((card) =>
+                posts.push({author: author, content: mockPost.content, cardId: card.id, cardName: card.name, cardImage: card.images.small})
             )
         }
         )
+        console.log(posts)
+        return result;
+    }
+
+    useEffect(() => {
+        getPosts()
+    })
+    
+    
+    const fillFeed = () => {
+        let index = 0;
+            const result = posts.map((post) => {
+                index ++;
+                return (
+                    
+                    <View style={styles.post} key={index}>
+                    <Text style={styles.postAuthor}>{post.author}</Text>
+                    <Text style={styles.postContent}>{post.content}</Text>
+                    <ImageBackground source={post.cardImage === ""? require("../../mock/images/venusaur-1.jpg") : {uri: post.cardImage}} style={styles.postImage} resizeMode="cover">
+                        <Text style={styles.postTextImage}>{post.cardName}</Text>
+                    </ImageBackground>
+                </View>
+            )
+        })
         return result;
     }
 
@@ -41,7 +50,7 @@ const SocialHome = () => {
         <ScrollView>
             <Text style={styles.titleContent}>Your friends' feed HERE</Text>
             <View style={styles.largeContent}>
-                {fillFeed()}
+                {posts.length === 0? <Text style={styles.titleContent}>Loading . . .</Text> : fillFeed()}
             </View>
         </ScrollView>
     )

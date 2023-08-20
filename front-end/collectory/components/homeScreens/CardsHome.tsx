@@ -72,7 +72,7 @@ const CardsHome = () => {
     // BLOCKS AND SETS
     const [blocks, setBlocks] = React.useState<{ title: string; data: string[]; }[]>([]);
     const [sets, setSets] = React.useState<{ id: string, name: string }[]>([]);
-    const [openedBlocks] = React.useState<string[]>([]);
+    const [openedBlocks, setOpenedBlocks] = React.useState<string[]>([]);
 
     const request = async () => { await getSets()
         .then((sets) => {
@@ -103,7 +103,12 @@ const CardsHome = () => {
     let index = 0
 
     const onToggleSet = (title: string) => {
-        openedBlocks.find((b) => b === title) ? openedBlocks.splice(openedBlocks.indexOf(title), 1) : openedBlocks.push(title);
+        //openedBlocks.find((b) => b === title) ? openedBlocks.splice(openedBlocks.indexOf(title), 1) : openedBlocks.push(title);
+        if(openedBlocks.find((b) => b === title)){
+            setOpenedBlocks(openedBlocks.filter((b) => b !== title))
+        }else{
+            setOpenedBlocks([...openedBlocks, title])
+        }
     }
 
     const onSetPress = (set: string) => {

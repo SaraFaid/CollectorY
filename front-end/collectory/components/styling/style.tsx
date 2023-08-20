@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
     safeAreaViewContent: {
         width: '90%',
-        minHeight: '50%',
+        minHeight: '90%',
         backgroundColor: colors.light,
         alignSelf: 'center',
         borderRadius: 10,
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
 
     darkLargeContent: {
         width: '95%',
+        minHeight: '80%',
         backgroundColor: colors.dark,
         justifyContent: 'center',
         alignSelf: 'center',
@@ -193,9 +194,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
     postImage: {
-        flex: 1,
-        height: 150,
-        alignItems: 'center',
+        height: 275,
         justifyContent: 'flex-end',
         margin: 5,
     },
