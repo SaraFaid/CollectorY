@@ -5,7 +5,7 @@ const { User, Role, Collection, Card, License } = require("../../sequelize");
 module.exports = (app) => {
   // example url http://localhost:5000/api/users/all
   app
-    .get("/api/users/all", (req, res) => {
+    .get("/api/users/all", verifyToken, (req, res) => {
       User.findAll({
         include: [
           {

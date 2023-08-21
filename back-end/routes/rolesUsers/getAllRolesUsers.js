@@ -1,10 +1,11 @@
 //route to get all rolesUsers
 
 const {User, Role} = require ('../../sequelize');
+const verifyToken = require("../../helper/verifyToken");
 
 module.exports = (app) => {
     // example url http://localhost:5000/api/rolesUsers/all
-    app.get('/api/rolesUsers/all', (req, res) => {
+    app.get('/api/rolesUsers/all', verifyToken, (req, res) => {
         User.findAll(
             {
                 include: [{
