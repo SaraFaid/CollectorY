@@ -1,6 +1,6 @@
 import { View, Text, ImageBackground, ScrollView } from "react-native";
 import styles from "../styling/style";
-import React, { useEffect } from "react";
+import React from "react";
 import dataPosts from "../../mock/mockedPosts.json"
 import dataUsers from "../../mock/mockedUsers.json"
 import { getCardByID } from "../../services/pokemonAPI";
@@ -21,15 +21,12 @@ const SocialHome = () => {
         )
         console.log(posts)
         return result;
-    }
-
-    useEffect(() => {
-        getPosts()
-    })
-    
+    }    
     
     const fillFeed = () => {
         let index = 0;
+        if (posts.length === 0) { getPosts() }
+        else {
             const result = posts.map((post) => {
                 index ++;
                 return (
@@ -44,6 +41,7 @@ const SocialHome = () => {
             )
         })
         return result;
+    }
     }
 
     return (

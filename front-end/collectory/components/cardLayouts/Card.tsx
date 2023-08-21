@@ -1,21 +1,20 @@
 import React from "react";
-import { Text, ImageBackground } from "react-native";
+import { Text, ImageBackground, Pressable } from "react-native";
 import styles from "../styling/style";
 
 type CardsProps = {
-    image: string;
-    cardName: string;
-    cardId: string;
+    card : any;
+    onPress: (card: any) => void;
 }
 
-const Card = ({image, cardName, cardId}: CardsProps) => {
-    const path = {uri: image}
+const Card = ({card, onPress}: CardsProps) => {
+    const path = {uri: card.images.small}
     return (
-        <>
-            <ImageBackground source={path} style={styles.card} resizeMode="cover" key={cardId}>
-                    <Text style={styles.postTextImage}>{cardName}</Text>
+        <Pressable onPress={() => onPress(card)} style={styles.pressableCard}>
+            <ImageBackground source={path} style={styles.card}  resizeMode="contain" key={card.id}>
+                    <Text style={styles.postTextImage}>{card.name}</Text>
             </ImageBackground>
-        </>
+        </Pressable>
     )
 }
 

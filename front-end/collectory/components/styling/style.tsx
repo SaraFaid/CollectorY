@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         borderRadius: 10,
-        padding: 10,
-        marginVertical: 20,
+        padding: 5,
+        marginVertical: 10,
         paddingBottom: 120,
     },
 
@@ -58,14 +58,16 @@ const styles = StyleSheet.create({
     },
 
     darkLargeContent: {
-        width: '95%',
+        width: '100%',
         minHeight: '80%',
         backgroundColor: colors.dark,
         justifyContent: 'center',
         alignSelf: 'center',
         borderRadius: 15,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingTop: 10,
         marginVertical: 20,
+        paddingBottom: 50,
     },
     titleContent: {
         fontSize: 20,
@@ -209,13 +211,24 @@ const styles = StyleSheet.create({
     },
 
     // cards styles
+    pressableCard: {
+        width: '33%',
+
+    },
     card: {
         flex: 1,
-        height: 160,
+        height: 145,
         alignItems: 'center',
         justifyContent: 'flex-end',
         margin: 5,
-        maxWidth: '33%',
+    },
+    largeCard: {
+        flex: 1,
+        width: 215,
+        height: 300,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        margin: 5,
     },
 
     license: {
@@ -252,6 +265,54 @@ const styles = StyleSheet.create({
     hiddensetText: {
         display: 'none',
     },
+
+    // modal
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+        minHeight: '50%',
+        minWidth: '75%',
+    },
+    modalView: {
+        backgroundColor: colors.secondary,
+        margin: 20,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        minHeight: '50%',
+        minWidth: '75%',
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+      },
+      buttonOpen: {
+        backgroundColor: '#F194FF',
+      },
+      buttonClose: {
+        backgroundColor: '#2196F3',
+      },
+      textStyle: {
+        color: colors.light,
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        color: colors.light,
+      },
 
   });
 

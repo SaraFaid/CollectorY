@@ -21,7 +21,7 @@ const CardsHome = () => {
     if (!isSetPressed && choosenSet !== "") { setChoosenSet("") }
 
     const onLicensePress = (id: string) => {
-        console.log("pressed");
+        // console.log("pressed");
         // get the id of the license and send back to the list of cards of that license
         
         switch (id) {
@@ -103,7 +103,6 @@ const CardsHome = () => {
     let index = 0
 
     const onToggleSet = (title: string) => {
-        //openedBlocks.find((b) => b === title) ? openedBlocks.splice(openedBlocks.indexOf(title), 1) : openedBlocks.push(title);
         if(openedBlocks.find((b) => b === title)){
             setOpenedBlocks(openedBlocks.filter((b) => b !== title))
         }else{
@@ -121,12 +120,12 @@ const CardsHome = () => {
         <>
         {
             isPokemonPressed || isYugiohPressed || isMagicPressed || isNarutoPressed?
-            isSetPressed? <Icon name='keyboard-backspace' size={30} color={colors.dark} onPress={() => {
+            isSetPressed? <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
                 setIsSetPressed(false);
             }}/> :
             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems:'center'}}>
 
-                <Icon name='keyboard-backspace' size={30} color={colors.dark} onPress={() => {
+                <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
                     setIsPokemonPressed(false);
                     setIsYugiohPressed(false);
                     setIsMagicPressed(false);
