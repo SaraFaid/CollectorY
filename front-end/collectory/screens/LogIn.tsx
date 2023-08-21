@@ -8,10 +8,12 @@ import StyledButton from "../components/buttons/StyledButton";
 import { RootStackParamList } from "../App";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import findUser from "../utils/utils";
+import {LogUserIn} from "../services/userAPI";
 
 type LogInProps = NativeStackScreenProps<RootStackParamList, "LogIn">;
 
-const LogIn: React.FC<LogInProps> = (props) => {
+const LogIn: React.FC<LogInProps> = (props) => 
+{
   // variables useStates
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,14 +36,13 @@ const LogIn: React.FC<LogInProps> = (props) => {
     ) {
       setErrorEmailFormat(true);
     } else {
-      const request = findUser(email, password);
-        if (request !== undefined) {
-          const userfound = request;
-          props.navigation.navigate("MainHome");
-          
-        } else {
-            setErrorNotGoodInfos(true);
-          }
+      LogUserIn(email, password).then((res) => {
+        if (res) {
+        props.navigation.navigate("MainHome");
+      } else {
+        setErrorNotGoodInfos(true);
+      } 
+      })
     }
   };
 
@@ -98,5 +99,6 @@ const LogIn: React.FC<LogInProps> = (props) => {
     </View>
   );
 }
+
 
 export default LogIn;

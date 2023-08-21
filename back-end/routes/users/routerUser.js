@@ -6,4 +6,6 @@
 module.exports = (app) => {
     require('./getAllUsers')(app);
     require('./getUserByEmailAddress')(app);
+    require('./logUserIn')(app);
+    require('./addUser')(app);
 }

@@ -31,6 +31,16 @@ export default function App() {
             fontWeight: 'bold',
           },
         }} />
+        <Stack.Screen name="LogIn" component={LogIn} options={{
+          title: 'Log In',
+          headerStyle: {
+            backgroundColor: colors.dark,
+          },
+          headerTintColor: colors.light,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }} />
       <Stack.Screen name="MainHome" component={MainHome}
           options={{
             title: 'Home',
@@ -44,16 +54,6 @@ export default function App() {
             headerBackVisible: false,
           }}
           /> 
-        <Stack.Screen name="LogIn" component={LogIn} options={{
-          title: 'Log In',
-          headerStyle: {
-            backgroundColor: colors.dark,
-          },
-          headerTintColor: colors.light,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }} />
          
       </Stack.Navigator>
     </NavigationContainer>

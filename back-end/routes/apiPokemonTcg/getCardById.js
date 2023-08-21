@@ -1,8 +1,4 @@
-const axios = require('axios').default;
-
-function getCardById(cardId) {
-    return axios.get('https://api.pokemontcg.io/v2/cards/' + cardId)
-}
+const getCardById = require("../../helper/getCardByIdRoute");
 
 module.exports = (app) => {
     app.get('/api/pokemon/card/:cardId', (req, res) => {
