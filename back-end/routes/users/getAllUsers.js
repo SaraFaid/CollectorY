@@ -1,4 +1,5 @@
 // import { getCardById } from "../apiPokemonTcg/getCardById";
+const  {verifyToken}  = require('../../verifyToken');
 
 const { User, Role, Collection, Card, License } = require("../../sequelize");
 

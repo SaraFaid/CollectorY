@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-const verifyToken = require("../../helper/verifyToken");
+const  {verifyToken}  = require('../../verifyToken');
 
 function getCards(setId) {
    return axios.get('https://api.pokemontcg.io/v2/cards/?q=set.id:' + setId)

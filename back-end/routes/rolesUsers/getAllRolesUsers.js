@@ -1,7 +1,7 @@
 //route to get all rolesUsers
 
 const {User, Role} = require ('../../sequelize');
-const verifyToken = require("../../helper/verifyToken");
+const  {verifyToken}  = require('../../verifyToken');
 
 module.exports = (app) => {
     // example url http://localhost:5000/api/rolesUsers/all
