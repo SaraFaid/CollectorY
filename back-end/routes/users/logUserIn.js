@@ -25,7 +25,7 @@ module.exports = (app) =>
       if (await argon2.verify(user.passwordDigest, password)) {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        res.send({ accessToken, refreshToken });
+        res.send({ user, accessToken, refreshToken });
       } else {
         return res.status(401).send({
           accessToken: null,

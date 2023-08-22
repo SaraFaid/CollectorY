@@ -38,17 +38,30 @@ function LogUserIn(emailAddress: string, password: string) {
     return axios.post(logInUser,{emailAddress, password})
     .then((res) => res.data)
           .then(async (data) => {
-            const { accessToken, refreshToken } = data;
+            const { user, accessToken, refreshToken } = data;
       
             await SecureStore.setItemAsync('accessToken', accessToken);
             await SecureStore.setItemAsync('refreshToken', refreshToken);
             axios.defaults.headers["authorization"] = "Bearer " + accessToken;
-            return true;
+            return user;
           })
           .catch((error) => {
             console.log(error.response.status);
-            return false;
+            return null;
           });
-}   
+}
 
-export { checkUserExists, addUser, LogUserIn };
+function LogUserOut() {
+    return SecureStore.deleteItemAsync('accessToken')
+    .then(() => SecureStore.deleteItemAsync('refreshToken'))
+    .then(() => {
+        axios.defaults.headers["authorization"] = "";
+        return true;
+    })
+    .catch((error) => {
+        console.log(error.response.status);
+        return false;
+    });
+}
+
+export { checkUserExists, addUser, LogUserIn, LogUserOut };

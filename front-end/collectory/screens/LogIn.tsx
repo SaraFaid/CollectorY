@@ -1,18 +1,18 @@
 // UI for the login in the application
 
+import { NavigationProp } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
-import styles from "../components/styling/style";
-import colors from "../components/styling/colors";
+import { Text, TextInput, View } from "react-native";
 import StyledButton from "../components/buttons/StyledButton";
-import { RootStackParamList } from "../App";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import findUser from "../utils/utils";
-import {LogUserIn} from "../services/userAPI";
+import colors from "../components/styling/colors";
+import styles from "../components/styling/style";
+import { LogUserIn } from "../services/userAPI";
 
-type LogInProps = NativeStackScreenProps<RootStackParamList, "LogIn">;
+type LogInProps = {
+  navigation: NavigationProp<any,any>
+}
 
-const LogIn: React.FC<LogInProps> = (props) => 
+function LogIn({navigation}: LogInProps) 
 {
   // variables useStates
   const [email, setEmail] = useState("");
@@ -38,7 +38,9 @@ const LogIn: React.FC<LogInProps> = (props) =>
     } else {
       LogUserIn(email, password).then((res) => {
         if (res) {
-        props.navigation.navigate("MainHome");
+          setEmail("");
+          setPassword("");
+        navigation.navigate("MainHome", {user: res});
       } else {
         setErrorNotGoodInfos(true);
       } 
@@ -60,6 +62,7 @@ const LogIn: React.FC<LogInProps> = (props) =>
             autoComplete="email"
             inputMode="email"
             textContentType="emailAddress"
+            defaultValue={email}
             onChangeText={(text) => setEmail(text)}
           />
           {
@@ -77,6 +80,7 @@ const LogIn: React.FC<LogInProps> = (props) =>
             inputMode="text"
             textContentType="password"
             secureTextEntry={true}
+            defaultValue={password}
             onChangeText={(text) => setPassword(text)}
           />
           {
@@ -90,10 +94,16 @@ const LogIn: React.FC<LogInProps> = (props) =>
           }
           <StyledButton
             title="Log In"
-            color={colors.dark}
+            color={colors.secondary}
             disabled={checkInputsFilled()}
             onPress={onClickSLogIn}
           />
+          <StyledButton
+                    title="Sign Up"
+                    color={colors.dark}
+                    disabled={false}
+                    onPress={() => navigation.navigate("SignUp")}
+                />
         </View>
       </View>
     </View>

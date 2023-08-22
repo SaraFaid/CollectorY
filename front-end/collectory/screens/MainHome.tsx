@@ -1,20 +1,25 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../App";
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
-import styles from "../components/styling/style";
+import { NavigationProp } from "@react-navigation/native";
 import React from "react";
-import SocialHome from "../components/homeScreens/SocialHome";
-import CollectionHome from "../components/homeScreens/CollectionHome";
-import CardsHome from "../components/homeScreens/CardsHome";
-import ProfileHome from "../components/homeScreens/ProfileHome";
+import { View } from "react-native";
 import LogoButton from "../components/buttons/LogoButton";
+import CardsHome from "../components/homeScreens/CardsHome";
+import CollectionHome from "../components/homeScreens/CollectionHome";
+import ProfileHome from "../components/homeScreens/ProfileHome";
+import SocialHome from "../components/homeScreens/SocialHome";
+import styles from "../components/styling/style";
 
-type MainHomeProps = NativeStackScreenProps<RootStackParamList, "MainHome">;
+type MainHomeProps = {
+  navigation: NavigationProp<any,any>,
+  route: NavigationProp<any,any>
+}
 
-const MainHome: React.FC<MainHomeProps> = (props) => {
+function MainHome ({navigation, route}: MainHomeProps) {
   const [selected, setSelected] = React.useState("collectory");
 
-  const fillScreen = (choice: string) => {
+  const userLogged = route.params?.user
+  console.log(userLogged)
+
+  const fillScreen = (choice: string, user: JSON, navigation: NavigationProp<any,any>) => {
     switch (choice) {
       case "collectory":
         return <SocialHome />;
@@ -23,7 +28,7 @@ const MainHome: React.FC<MainHomeProps> = (props) => {
       case "cards":
         return <CardsHome />;
       case "profile":
-        return <ProfileHome />;
+        return <ProfileHome user={user} nav={navigation} />;
       default:
         return <SocialHome />;
     }
@@ -74,7 +79,7 @@ const MainHome: React.FC<MainHomeProps> = (props) => {
           onPress={() => onPress("profile")}
         />
       </View>
-      <View style={styles.safeAreaViewContent}>{fillScreen(selected)}</View>
+      <View style={styles.safeAreaViewContent}>{fillScreen(selected, userLogged, navigation)}</View>
     </View>
   );
 };

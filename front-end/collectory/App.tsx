@@ -7,31 +7,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-export type RootStackParamList = {
-  SignUp: undefined;
-  LogIn: undefined;
-  MainHome: undefined;
-};
-
 export default function App() {
 
 
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const Stack = createNativeStackNavigator();
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="SignUp" component={SignUp} options={{
-          title: 'Sign Up',
-          headerStyle: {
-            backgroundColor: colors.dark,
-          },
-          headerTintColor: colors.light,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-        }} />
-        <Stack.Screen name="LogIn" component={LogIn} options={{
+      <Stack.Screen name="LogIn" component={LogIn} options={{
           title: 'Log In',
           headerStyle: {
             backgroundColor: colors.dark,
@@ -53,8 +37,19 @@ export default function App() {
             },
             headerBackVisible: false,
           }}
+          
           /> 
-         
+        <Stack.Screen name="SignUp" component={SignUp} initialParams={{user: {} as JSON}} options={{
+          title: 'Sign Up',
+          headerStyle: {
+            backgroundColor: colors.dark,
+          },
+          headerTintColor: colors.light,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,18 +1,19 @@
 // UI for the sign up in the application
 
+import { NavigationProp } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
-import styles from "../components/styling/style";
-import colors from "../components/styling/colors";
-import StyledButton from "../components/buttons/StyledButton";
+import { Alert, Text, TextInput, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../App";
-import { checkUserExists ,addUser } from "../services/userAPI";
+import StyledButton from "../components/buttons/StyledButton";
+import colors from "../components/styling/colors";
+import styles from "../components/styling/style";
+import { addUser } from "../services/userAPI";
 
-type SignUpProps = NativeStackScreenProps<RootStackParamList, "SignUp">;
+type SignUpProps = {
+  navigation: NavigationProp<any,any>
+}
 
-const SignUp: React.FC<SignUpProps> = (props) => {
+function SignUp ({navigation}: SignUpProps) {
   // variables useStates
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -51,7 +52,7 @@ const SignUp: React.FC<SignUpProps> = (props) => {
                 "Signed Up",
                 `You have successfully created your account, ${username}.`
               );
-              props.navigation.navigate("LogIn");
+              navigation.navigate("LogIn");
           }
         )
         .catch(
@@ -166,6 +167,14 @@ const SignUp: React.FC<SignUpProps> = (props) => {
             color={colors.secondary}
             disabled={checkInputsFilled()}
             onPress={onClickSignUp}
+            />
+            <StyledButton
+            title="Log In"
+            color={colors.dark}
+            disabled={false}
+            onPress={() => {
+              navigation.navigate("LogIn");
+            }}
             />
         </View>
       </View>
