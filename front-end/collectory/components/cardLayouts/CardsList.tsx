@@ -2,20 +2,19 @@ import React from "react";
 import {
   Alert,
   FlatList,
+  Image,
   Modal,
-  Pressable,
   SafeAreaView,
   Text,
-  View,
-    Image,
+  View
 } from "react-native";
 import { getCardsFromSetID } from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "./Card";
 
 import SelectDropdown from "react-native-select-dropdown";
-import colors from "../styling/colors";
 import StyledButton from "../buttons/StyledButton";
+import colors from "../styling/colors";
 
 type CardsListProps = {
   idSet: string;

@@ -11,6 +11,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FriendsList from "../profileLayouts/FriendsList";
 import Settings from "../profileLayouts/Settings";
 import Admin from "../profileLayouts/Admin";
+import CardExchange from "../profileLayouts/CardExchange";
+import ExchangeDemand from "../profileLayouts/ExchangeDemand";
 
 
 type ProfileHomeProps = {
@@ -50,6 +52,14 @@ const ProfileHome = ({user, nav}: ProfileHomeProps) => {
                 console.log(title)
                 setSelectedButton(title)
                 break
+                case "CardExchange":
+                console.log(title)
+                setSelectedButton(title)
+                break
+                case "ExchangeDemand":
+                console.log(title)
+                setSelectedButton(title)
+                break
             case "Settings":
                 console.log(title)
                 setSelectedButton(title)
@@ -83,6 +93,24 @@ const ProfileHome = ({user, nav}: ProfileHomeProps) => {
                 </>
                 )
                 break;
+                case "CardExchange":
+                return (<>
+                <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
+                    setSelectedButton("")
+                }}/>
+                <CardExchange/>
+                </>
+                )
+                break;
+                case "ExchangeDemand":
+                return (<>
+                <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
+                    setSelectedButton("")
+                }}/>
+                <ExchangeDemand/>
+                </>
+                )
+                break;
             case "Settings":
                 return (<>
                 <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
@@ -107,6 +135,8 @@ const ProfileHome = ({user, nav}: ProfileHomeProps) => {
                         <LongButton title="My Friends" onPress={() =>onPress("Friends")}/> 
                         : <></>
                     }
+                    <LongButton title="Cards to exchange" onPress={() => onPress("CardExchange")}/>
+                    <LongButton title="Exchange Demands" onPress={() => onPress("ExchangeDemand")}/>
                     <LongButton title="Settings" onPress={() => onPress("Settings")}/>
                     {
                         isAdministrator()? 
