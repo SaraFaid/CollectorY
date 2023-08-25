@@ -1,8 +1,9 @@
 const { Friend } = require("../../sequelize");
 const { Op } = require("sequelize");
+const { verifyToken } = require("../../verifyToken");
 
 module.exports = (app) => {
-  app.get("/api/friends/:id", (req, res) => {
+  app.get("/api/friends/:id", verifyToken, (req, res) => {
     Friend.findAll({
       where: {
         [Op.or]: [{ userId1: req.params.id }, { userId2: req.params.id }],
