@@ -1,8 +1,8 @@
 import React from "react";
-import colors from "./colors";
+import colors from "../styling/colors";
 import { View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import styles from "./style";
+import styles from "../styling/style";
 
 type LogoButtonProps = {
     name: string;
@@ -37,7 +37,7 @@ export default function LogoButton ({ name, onPress, selected}: LogoButtonProps)
     }
 
     return (
-        <View style={selected? styles.selectedLogoButton : styles.logoButton}>
+        <View style={selected? styles.selectedLogoButton : styles.logoButton }>
             <Icon name={iconName} size={40} color={selected ? colors.light : colors.dark} onPress={() => onPress(name)}/>
         </View>       
         )
