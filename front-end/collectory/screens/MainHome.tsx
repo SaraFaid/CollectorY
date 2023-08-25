@@ -9,28 +9,45 @@ import SocialHome from "../components/homeScreens/SocialHome";
 import styles from "../components/styling/style";
 
 type MainHomeProps = {
-  navigation: NavigationProp<any,any>,
-  route: NavigationProp<any,any>
-}
+  navigation: NavigationProp<any, any>;
+  route: NavigationProp<any, any>;
+};
 
-function MainHome ({navigation, route}: MainHomeProps) {
+function MainHome({ navigation, route }: MainHomeProps) {
   const [selected, setSelected] = React.useState("collectory");
 
-  const userLogged = route.params?.user
-  console.log(userLogged)
+  const userLogged = route.params?.user;
+  //console.log(userLogged);
 
-  const fillScreen = (choice: string, user: JSON, navigation: NavigationProp<any,any>) => {
-    switch (choice) {
-      case "collectory":
-        return <SocialHome />;
-      case "collections":
-        return <CollectionHome />;
-      case "cards":
-        return <CardsHome />;
-      case "profile":
-        return <ProfileHome user={user} nav={navigation} />;
-      default:
-        return <SocialHome />;
+  const fillScreen = (
+    choice: string,
+    user: JSON,
+    navigation: NavigationProp<any, any>
+  ) => {
+    if (userLogged.collectory) {
+      switch (choice) {
+        case "collectory":
+          return <SocialHome userLogged={user} />;
+        case "collections":
+          return <CollectionHome />;
+        case "cards":
+          return <CardsHome />;
+        case "profile":
+          return <ProfileHome user={user} nav={navigation} />;
+        default:
+          return <SocialHome userLogged={user} />;
+      }
+    } else {
+      switch (choice) {
+        case "collections":
+          return <CollectionHome />;
+        case "cards":
+          return <CardsHome />;
+        case "profile":
+          return <ProfileHome user={user} nav={navigation} />;
+        default:
+          return <CardsHome />;
+      }
     }
   };
 
@@ -58,11 +75,14 @@ function MainHome ({navigation, route}: MainHomeProps) {
   return (
     <View style={styles.container}>
       <View style={styles.backBar}>
-        <LogoButton
+        {userLogged.collectory?
+
+          <LogoButton
           name="collectory"
           selected={selected === "collectory"}
           onPress={() => onPress("collectory")}
-        />
+          />
+        : <></>}
         <LogoButton
           name="cards"
           selected={selected === "cards"}
@@ -79,9 +99,11 @@ function MainHome ({navigation, route}: MainHomeProps) {
           onPress={() => onPress("profile")}
         />
       </View>
-      <View style={styles.safeAreaViewContent}>{fillScreen(selected, userLogged, navigation)}</View>
+      <View style={styles.safeAreaViewContent}>
+        {fillScreen(selected, userLogged, navigation)}
+      </View>
     </View>
   );
-};
+}
 
 export default MainHome;

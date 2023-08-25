@@ -1,6 +1,7 @@
 import axios from "axios";
-import { isUserExisting, logInUser, registerUser } from "./routesAPI";
+import { isUserExisting, logInUser, registerUser, getUserById, getAllUsers } from "./routesAPI";
 import * as SecureStore from 'expo-secure-store';
+import jwtDecode from "jwt-decode";
 
 function checkUserExists(email: string) {
     return axios.get(isUserExisting + email)
@@ -16,6 +17,31 @@ function checkUserExists(email: string) {
             }
     )
 }
+
+function getUserbyID(id: number) {
+    return axios.get(getUserById + id.toString())
+    .then(
+        (res) => {
+            const data: {
+                "id": number,
+                "emailAddress": string,
+                "passwordDigest": string,
+                "username": string,
+                "collectory": boolean,
+                "createdAt": string,
+                "updatedAt": string
+            } = res.data
+            return data
+        }
+    )
+    .catch(
+        (err) => {
+            console.log(err)
+            return undefined
+            }
+    )
+}
+
 
 function addUser(emailAddress: string, password: string, username: string, collectory: boolean) {
     return axios.post(registerUser, {emailAddress, password, username, collectory})
@@ -64,4 +90,48 @@ function LogUserOut() {
     });
 }
 
-export { checkUserExists, addUser, LogUserIn, LogUserOut };
+async function getUserFromToken () {
+    const token = await SecureStore.getItemAsync('accessToken')
+    if (token !== null) {
+        const user: {
+            "id": number,
+            "emailAddress": string,
+            "passwordDigest": string,
+            "username": string,
+            "collectory": boolean,
+            "createdAt": string,
+            "updatedAt": string
+        } = jwtDecode(token)
+        //console.log(user)
+        return user
+    }
+    else return undefined
+}
+
+    function getEveryUser() {
+        return axios.get(getAllUsers)
+        .then(
+            (res) => {
+                console.log(res.data)
+                const data: {
+                    "id": number,
+                    "emailAddress": string,
+                    "passwordDigest": string,
+                    "username": string,
+                    "collectory": boolean,
+                    "createdAt": string,
+                    "updatedAt": string
+                }[] = res.data
+                return data
+            }
+        )
+        .catch(
+            (err) => {
+                console.log(err)
+                return undefined
+                }
+        )
+    }
+
+
+export { checkUserExists, getUserbyID, addUser, LogUserIn, LogUserOut, getUserFromToken, getEveryUser };

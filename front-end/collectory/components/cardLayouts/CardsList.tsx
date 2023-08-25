@@ -13,6 +13,10 @@ import { getCardsFromSetID } from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "./Card";
 
+import SelectDropdown from "react-native-select-dropdown";
+import colors from "../styling/colors";
+import StyledButton from "../buttons/StyledButton";
+
 type CardsListProps = {
   idSet: string;
   nameSet: string | undefined;
@@ -22,6 +26,10 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
   const [cards, setCards] = React.useState<any[]>([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState<{id: string, name: string, images: {small: string, large: string}}>({id: "", name: "", images: {small: "", large: ""}});
+
+  const collections = ["Darkrai", "Gallade <3"]
+  const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+
 
   const request = async () => {
     await getCardsFromSetID(idSet)
@@ -44,12 +52,62 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
     setModalVisible(true);
   };
 
-  const getImage = () => {
+  const getCard = () => {
     if(selectedCard.images.large === undefined) return (<></>)
     else {
         const image = selectedCard.images.large
         //console.log(selectedCard.images.large)
-        return <Image source={{uri : image}} style={styles.largeCard} resizeMode="contain" key={selectedCard.id}/>
+        return (
+        <>
+        <Image source={{uri : image}} style={styles.largeCard} resizeMode="contain" key={selectedCard.id}/>
+        <Text style={styles.darkTextContent}>{selectedCard.number} / {selectedCard.set.printedTotal}</Text>
+        <Text style={styles.darkTextContent}>{selectedCard.set.name} - {selectedCard.set.series} Set</Text>
+        <Text style={styles.darkTextContent}>{selectedCard.rarity}</Text>
+        <Text style={styles.darkTextContent}>{selectedCard.artist}</Text>
+        <View style={styles.viewRow}>
+        <SelectDropdown
+        data={quantity}
+        onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index)
+        }
+        }
+        defaultButtonText={"Quantity"}
+        defaultValue={quantity[0]}
+        buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+        }
+        }
+        rowTextForSelection={(item, index) => {
+            return item
+        }
+        }
+        buttonStyle={{borderRadius: 15, marginHorizontal: 10, width: 100, backgroundColor: colors.primary}}
+        buttonTextStyle={{color: colors.dark,fontWeight: 'bold'}}
+        />
+        <SelectDropdown
+        data={collections}
+        onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index)
+        }
+        }
+        defaultButtonText={"Add to collection"}
+        buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+        }
+        }
+        rowTextForSelection={(item, index) => {
+            return item
+        }
+        }
+        buttonStyle={{borderRadius: 15, marginHorizontal: 10, width: 200, backgroundColor: colors.primary}}
+        buttonTextStyle={{color: colors.dark,fontWeight: 'bold'}}
+        />
+        </View>
+        <StyledButton title="Add to this collection" onPress={() => { } } color={colors.dark} disabled={false}/>
+        <StyledButton title="Add to Wishlist" onPress={() => { } } color={colors.dark} disabled={false}/>
+
+        </>
+        )
     }
     }
 
@@ -68,12 +126,10 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.darkTitleContent}>{selectedCard.name}</Text>
-            {selectedCard.id !== ""? getImage(): <></>}
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={() => {
+            {selectedCard.id !== ""? getCard(): <></>}
+            <StyledButton color={colors.dark} title="Back" disabled={false} onPress={() => {
                 setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
-                setModalVisible(!modalVisible)}}>
-              <Text style={styles.textStyle}>Back</Text>
-            </Pressable>
+                setModalVisible(!modalVisible)}}/>
           </View>
         </View>
       </Modal>

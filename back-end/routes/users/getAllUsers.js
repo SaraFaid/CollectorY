@@ -29,31 +29,7 @@ module.exports = (app) => {
           },
         ],
       }).then(async (users) => {
-        res.json(users);    
-        // https.get('https://api.pokemontcg.io/v2/cards/' + users.Card.cardId, (res) => {
-        //     console.log(res)
-        // })
-
-        // let cards = [];
-
-        // var users = await Promise.all(
-        //   users.map(async (user) => {
-        //     user.collections.map((collection) => {
-        //       if (collection.licenseId === 1) {
-        //         collection.cards.map((card) => {
-        //           getCardById(card.cardId)
-        //             .then((card) => {
-        //               cards.push(card);
-        //             })
-        //             .catch((err) => {
-        //               console.log(err);
-        //             });
-        //         });
-        //       }
-        //     });
-        //   })
-        // );
-        //res.json(users);
+        res.json(users);
       })
     .catch((error) => {
       console.error(error);

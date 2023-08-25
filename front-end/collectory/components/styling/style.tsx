@@ -80,8 +80,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.light,
-        marginVertical: 20,
+        marginVertical: 10,
         alignSelf: 'center',
+    },
+    darkTextContent: {
+        fontSize: 16,
+        fontWeight: 'normal',
+        color: colors.light,
+        marginVertical: 10,
     },
     textContent: {
         fontSize: 16,
@@ -139,17 +145,58 @@ const styles = StyleSheet.create({
         marginHorizontal: 60,
         marginVertical: 15,
     },
+    collectionButtonView: {
+        width: '125%',
+        height: 100,
+        borderWidth: 2,
+        borderColor: colors.light,
+        borderRadius: 5,
+        backgroundColor: colors.tertiary,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    longButtonView: {
+        width: '150%',
+        height: 50,
+        borderWidth: 2,
+        borderColor: colors.light,
+        borderRadius: 5,
+        backgroundColor: colors.tertiary,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    longButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.light,
+        marginVertical: 5,
+        textAlign: 'center',
+    },
     logoButton: {
-        width: '25%',
+        minWidth: '25%',
+        maxWidth: '33%',
         height: 50,
         backgroundColor: colors.light,
         alignItems: 'center',
         justifyContent: 'center',
     },
     selectedLogoButton: {
-        width: '25%',
+        minWidth: '25%',
+        maxWidth: '33%',
         height: 50,
         backgroundColor: colors.dark,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    likeButton: {
+        width: '100%',
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    selectedLikeButton: {
+        width: '100%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -196,7 +243,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
     postImage: {
-        height: 275,
+        height: 290,
         justifyContent: 'flex-end',
         margin: 5,
     },
@@ -223,12 +270,8 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     largeCard: {
-        flex: 1,
-        width: 215,
-        height: 300,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        margin: 5,
+        width: 145,
+        height: 200,
     },
 
     license: {
@@ -277,20 +320,20 @@ const styles = StyleSheet.create({
     },
     modalView: {
         backgroundColor: colors.secondary,
-        margin: 20,
         borderRadius: 20,
-        padding: 35,
+        padding: 15,
         alignItems: 'center',
+        justifyContent: 'center',
         shadowColor: '#000',
         shadowOffset: {
-          width: 0,
+          width: 10,
           height: 2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        minHeight: '50%',
-        minWidth: '75%',
+        minHeight: '80%',
+        minWidth: '90%',
       },
       button: {
         borderRadius: 20,
@@ -314,6 +357,68 @@ const styles = StyleSheet.create({
         color: colors.light,
       },
 
+      // friends
+        friend: {
+            width: '100%',
+            borderRadius: 10,
+            padding: 10,
+            marginVertical: 5,
+            backgroundColor: colors.tertiary,
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'center',
+
+        },
+        friendText: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: colors.light,
+            borderRadius: 10,
+            padding: 5,
+        },
+
+        // settings
+        viewRowNarrow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 2,
+            width: '80%',
+        },
+        textInputSmall: {
+            width: '50%',
+            height: 40,
+            backgroundColor: colors.light,
+            borderColor: colors.dark,
+            borderWidth: 1,
+            borderRadius: 10,
+            padding: 10,
+            marginVertical: 10,
+        },
+
+        // profile admin
+        userAdminView: {
+            width: '100%',
+            borderRadius: 10,
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            marginVertical: 5,
+            backgroundColor: colors.tertiary,
+        },
+        userNameTextAdmin: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: colors.light,
+            borderRadius: 10,
+            padding: 5,
+        },
+        textAdmin: {
+            fontSize: 14,
+            fontWeight: 'normal',
+            color: colors.light,
+            borderRadius: 10,
+            padding: 5,
+        },
   });
 
   export default styles;

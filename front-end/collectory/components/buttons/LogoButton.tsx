@@ -37,7 +37,7 @@ export default function LogoButton ({ name, onPress, selected}: LogoButtonProps)
     }
 
     return (
-        <View style={selected? styles.selectedLogoButton : styles.logoButton}>
+        <View style={selected? styles.selectedLogoButton : styles.logoButton }>
             <Icon name={iconName} size={40} color={selected ? colors.light : colors.dark} onPress={() => onPress(name)}/>
         </View>       
         )
