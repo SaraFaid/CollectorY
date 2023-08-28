@@ -1,7 +1,7 @@
 // styled buton component
 import React from "react";
 import { View, Button } from "react-native";
-import styles from "./style";
+import styles from "../styling/style";
 
 type StyledButtonProps = {
     title: string;

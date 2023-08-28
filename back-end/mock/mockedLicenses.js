@@ -18,5 +18,9 @@ module.exports = [
     {
         "id": 5,
         "licenseName": "WWE"
-    }
+    },
+    {
+        "id": 6,
+        "licenseName": "Naruto"
+    },
 ]

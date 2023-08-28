@@ -1,17 +1,19 @@
 // UI for the sign up in the application
 
+import { NavigationProp } from "@react-navigation/native";
 import React, { useState } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
-import styles from "../components/style";
-import colors from "../components/colors";
-import StyledButton from "../components/StyledButton";
+import { Alert, Text, TextInput, View } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../App";
+import StyledButton from "../components/buttons/StyledButton";
+import colors from "../components/styling/colors";
+import styles from "../components/styling/style";
+import { addUser } from "../services/userAPI";
 
-type SignUpProps = NativeStackScreenProps<RootStackParamList, "SignUp">;
+type SignUpProps = {
+  navigation: NavigationProp<any,any>
+}
 
-const SignUp: React.FC<SignUpProps> = (props) => {
+function SignUp ({navigation}: SignUpProps) {
   // variables useStates
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -43,11 +45,25 @@ const SignUp: React.FC<SignUpProps> = (props) => {
       setErrorEmail(true);
     } else {
       if (password === confirmPassword) {
-        Alert.alert(
-          "Signed Up",
-          `You have successfully created your account, ${username}.`
-        );
-        props.navigation.navigate("LogIn");
+        addUser(email, password, username, collectory)
+        .then(
+          (res: any) => {
+              Alert.alert(
+                "Signed Up",
+                `You have successfully created your account, ${username}.`
+              );
+              navigation.navigate("LogIn");
+          }
+        )
+        .catch(
+          (err) => {
+            console.log(err)
+            Alert.alert(
+              "Error",
+              `A weird error occured while creating your account.`
+            );
+            }
+        )
       } else {
         setErrorPassword(true);
       }
@@ -143,7 +159,7 @@ const SignUp: React.FC<SignUpProps> = (props) => {
 
               <BouncyCheckbox style={{alignSelf: 'center'}} size={25} fillColor={colors.dark} innerIconStyle={{borderWidth: 4}} disableText onPress={() => {setTerms(!terms)}}/>
               <Text style={styles.smallTextContent}>
-              By clicking on Sign Up, you agree to our Terms of Service and Privacy Policy.
+              By clicking on this button, you agree to our Terms of Service and Privacy Policy.
               </Text>
             </View>
           <StyledButton
@@ -151,6 +167,14 @@ const SignUp: React.FC<SignUpProps> = (props) => {
             color={colors.secondary}
             disabled={checkInputsFilled()}
             onPress={onClickSignUp}
+            />
+            <StyledButton
+            title="Log In"
+            color={colors.dark}
+            disabled={false}
+            onPress={() => {
+              navigation.navigate("LogIn");
+            }}
             />
         </View>
       </View>

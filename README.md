@@ -1,1 +1,4 @@
-### CollectorY
+### CollectorY - School Project
+
+
+[explanation coming soon]
