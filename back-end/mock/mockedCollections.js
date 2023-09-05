@@ -8,8 +8,13 @@ module.exports = [
     },
     {
         userId: 3,
-        collectionName: 'Chrichri en folie',
-        licenseId: 5
+        collectionName: 'Charizard!',
+        licenseId: 1
+    },
+    {
+        userId: 3,
+        collectionName: 'Cool Ghosts Squad',
+        licenseId: 1
     },
     {
         userId: 2,

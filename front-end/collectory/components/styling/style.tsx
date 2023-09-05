@@ -69,6 +69,9 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         paddingBottom: 50,
     },
+    listContent:{
+        width: '100%',
+    },
     titleContent: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -146,7 +149,7 @@ const styles = StyleSheet.create({
         marginVertical: 15,
     },
     collectionButtonView: {
-        width: '125%',
+        width: '100%',
         height: 100,
         borderWidth: 2,
         borderColor: colors.light,

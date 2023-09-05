@@ -15,11 +15,6 @@ module.exports = [
         "roleId": 2
     },
     {
-        "id": 4,
-        "userId": 3,
-        "roleId": 1
-    },
-    {
         "id": 5,
         "userId": 3,
         "roleId": 4

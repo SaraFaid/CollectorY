@@ -9,9 +9,8 @@ type CollectionButtonProps = {
 
 export default function CollectionButton ({ collectionName, onPress }: CollectionButtonProps) {
     return (
-        <Pressable style={styles.collectionButtonView} onPress={onPress}>
+        <Pressable style={styles.collectionButtonView} onPress={onPress} >
             <Text style={styles.longButtonText}>{collectionName}</Text>
-            <Text style={styles.longButtonText}>Number of cards: {3 + collectionName.length}</Text>
         </Pressable>
     )
 }

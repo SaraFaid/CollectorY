@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Alert,
   FlatList,
@@ -9,7 +9,7 @@ import {
   View,
     Image,
 } from "react-native";
-import { getCardByID } from "../../services/pokemonAPI";
+import { getCardsList } from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "../cardLayouts/Card";
 
@@ -23,20 +23,25 @@ const CardCollection = ({ nameCollection, cardIdList }: CardCollectionProps) => 
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState<{id: string, name: string, images: {small: string, large: string}}>({id: "", name: "", images: {small: "", large: ""}});
 
-  const request = async () => {
-    cardIdList.map(async (id) => {
-        await getCardByID(id)
-      .then((card) => {
-          setCards((cards) => [...cards, card]);
-        })
+  
+  const request =  () => {
+
+    getCardsList(cardIdList)
+    .then((list) => {
+      setCards(list)
+      }
+    )
       .catch((error) => {
         console.log(error);
-      });
-    })
-    };
+      }
+    );  
+  };
 
   if (cards.length === 0) {
-    request();
+    // getCardsList(cardIdList);
+    request()
+    
+
   }
 
   const showFullCard = (card: {id: string, name: string, images: {small: string, large: string}}) => {
@@ -53,45 +58,61 @@ const CardCollection = ({ nameCollection, cardIdList }: CardCollectionProps) => 
     }
     }
 
-  return (
-    <SafeAreaView style={styles.darkLargeContent}>
+    const switchScreen = () => {
+      // if(cards.length === 0) request()
+      if(cardIdList.length === 0){
+        return (
+          <>
+          <SafeAreaView style={styles.darkLargeContent}>
+          <Text style={styles.darkTitleContent}>{nameCollection}</Text>
+            <Text style={styles.darkTitleContent}>No cards in this collection.</Text>
+            </SafeAreaView>
+            </>)
+      }
+      else {
+        return (
+          <>
+          <SafeAreaView style={styles.darkLargeContent}>
       <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible && selectedCard.id !==""}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
-          setModalVisible(!modalVisible);
-        }}
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible && selectedCard.id !==""}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+        setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
+        setModalVisible(!modalVisible);
+      }
+    }
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.darkTitleContent}>{selectedCard.name}</Text>
-            {selectedCard.id !== ""? getImage(): <></>}
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={() => {
-                setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
-                setModalVisible(!modalVisible)}}>
-              <Text style={styles.textStyle}>Back</Text>
-            </Pressable>
-          </View>
+      <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+      <Text style={styles.darkTitleContent}>{selectedCard.name}</Text>
+      {selectedCard.id !== ""? getImage(): <></>}
+      <Pressable style={[styles.button, styles.buttonClose]} onPress={() => {
+        setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
+        setModalVisible(!modalVisible)}}>
+        <Text style={styles.textStyle}>Back</Text>
+        </Pressable>
         </View>
-      </Modal>
-      <Text style={styles.darkTitleContent}>{nameCollection}</Text>
-      {cards.length !== 0 ? (
+        </View>
+        </Modal>
+        <Text style={styles.darkTitleContent}>{nameCollection}</Text>
         <FlatList
-          data={cards}
-          renderItem={({ item }) => (
-            <Card card={item} onPress={() => showFullCard(item)} />
+        data={cards}
+        renderItem={({ item }) => (
+          <Card card={item} onPress={() => showFullCard(item)} />
           )}
           keyExtractor={(item) => item.id}
           numColumns={3}
-        />
-      ) : (
-        <Text style={styles.darkTitleContent}>Loading . . .</Text>
-      )}
-    </SafeAreaView>
-  );
+          />
+          </SafeAreaView>
+          </>
+        )
+
+      }
+    }
+
+  return switchScreen()
 };
 
 export default CardCollection;

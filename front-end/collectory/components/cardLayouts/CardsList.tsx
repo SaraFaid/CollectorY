@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Alert,
   FlatList,
@@ -6,15 +6,18 @@ import {
   Modal,
   SafeAreaView,
   Text,
-  View
+  View,
 } from "react-native";
 import { getCardsFromSetID } from "../../services/pokemonAPI";
+import { getCollectionByUser } from "../../services/collectionApi";
 import styles from "../styling/style";
 import Card from "./Card";
 
 import SelectDropdown from "react-native-select-dropdown";
 import StyledButton from "../buttons/StyledButton";
 import colors from "../styling/colors";
+import { getUserFromToken } from "../../services/userAPI";
+import { addCardInCollection } from "../../services/cardAPI";
 
 type CardsListProps = {
   idSet: string;
@@ -22,15 +25,36 @@ type CardsListProps = {
 };
 
 const CardsList = ({ idSet, nameSet }: CardsListProps) => {
-  const [cards, setCards] = React.useState<any[]>([]);
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState<{id: string, name: string, images: {small: string, large: string}}>({id: "", name: "", images: {small: "", large: ""}});
+  const [cards, setCards] = useState<any[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<{
+    id: string;
+    name: string;
+    images: { small: string; large: string };
+  }>({ id: "", name: "", images: { small: "", large: "" } });
 
-  const collections = ["Darkrai", "Gallade <3"]
-  const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+  const [collections, setCollections] = useState<{
+    id: number;
+    userId: number;
+    collectionName: string;
+    licenseId: number;
+    createdAt: string;
+    updatedAt: string;
+}[]>([]);
 
+const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
+const [selectedCollection, setSelectedCollection] = useState<{
+    id: number;
+    userId: number;
+    collectionName: string;
+    licenseId: number;
+    createdAt: string;
+    updatedAt: string;
+}>({id: 0, userId: 0, collectionName: "", licenseId: 0, createdAt: "", updatedAt: ""});
 
-  const request = async () => {
+  const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+  const requestCard = async () => {
     await getCardsFromSetID(idSet)
       .then((set) => {
         set.map((card: any) => {
@@ -43,92 +67,172 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
   };
 
   if (cards.length === 0) {
-    request();
+    requestCard();
   }
 
-  const showFullCard = (card: {id: string, name: string, images: {small: string, large: string}}) => {
+  const requestCollections = async () => {
+    let userId  = 0
+    getUserFromToken()
+    .then((user) => {
+      if (user !== undefined) {
+        userId = user.id
+        getCollectionByUser(userId)
+          .then((list) => {
+            if (list !== undefined && list.length > 0) setCollections(list);
+            else setCollections([]);
+          })
+          .catch((error) => {
+            console.log(error);
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  };
+
+  const showFullCard = (card: {
+    id: string;
+    name: string;
+    images: { small: string; large: string };
+  }) => {
     setSelectedCard(card);
     setModalVisible(true);
+    requestCollections();
+  };
+
+  const addCardToCollection = () => {
+    addCardInCollection(selectedCollection.id, selectedCard.id, selectedQuantity)
+    .then((res) => {
+      setModalVisible(false)
+      console.log(res)
+    }
+    )
+    .catch((err) => {
+      console.log(err)
+    })
   };
 
   const getCard = () => {
-    if(selectedCard.images.large === undefined) return (<></>)
+    if (selectedCard.images.large === undefined) return <></>;
     else {
-        const image = selectedCard.images.large
-        //console.log(selectedCard.images.large)
-        return (
+      const image = selectedCard.images.large;
+      //console.log(selectedCard.images.large)
+      return (
         <>
-        <Image source={{uri : image}} style={styles.largeCard} resizeMode="contain" key={selectedCard.id}/>
-        <Text style={styles.darkTextContent}>{selectedCard.number} / {selectedCard.set.printedTotal}</Text>
-        <Text style={styles.darkTextContent}>{selectedCard.set.name} - {selectedCard.set.series} Set</Text>
-        <Text style={styles.darkTextContent}>{selectedCard.rarity}</Text>
-        <Text style={styles.darkTextContent}>{selectedCard.artist}</Text>
-        <View style={styles.viewRow}>
-        <SelectDropdown
-        data={quantity}
-        onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-        }
-        }
-        defaultButtonText={"Quantity"}
-        defaultValue={quantity[0]}
-        buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem
-        }
-        }
-        rowTextForSelection={(item, index) => {
-            return item
-        }
-        }
-        buttonStyle={{borderRadius: 15, marginHorizontal: 10, width: 100, backgroundColor: colors.primary}}
-        buttonTextStyle={{color: colors.dark,fontWeight: 'bold'}}
-        />
-        <SelectDropdown
-        data={collections}
-        onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-        }
-        }
-        defaultButtonText={"Add to collection"}
-        buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem
-        }
-        }
-        rowTextForSelection={(item, index) => {
-            return item
-        }
-        }
-        buttonStyle={{borderRadius: 15, marginHorizontal: 10, width: 200, backgroundColor: colors.primary}}
-        buttonTextStyle={{color: colors.dark,fontWeight: 'bold'}}
-        />
-        </View>
-        <StyledButton title="Add to this collection" onPress={() => { } } color={colors.dark} disabled={false}/>
-        <StyledButton title="Add to Wishlist" onPress={() => { } } color={colors.dark} disabled={false}/>
-
+          <Image
+            source={{ uri: image }}
+            style={styles.largeCard}
+            resizeMode="contain"
+            key={selectedCard.id}
+          />
+          <Text style={styles.darkTextContent}>
+            {selectedCard.number} / {selectedCard.set.printedTotal}
+          </Text>
+          <Text style={styles.darkTextContent}>
+            {selectedCard.set.name} - {selectedCard.set.series} Set
+          </Text>
+          <Text style={styles.darkTextContent}>{selectedCard.rarity}</Text>
+          <Text style={styles.darkTextContent}>{selectedCard.artist}</Text>
+          <View style={styles.viewRow}>
+            <SelectDropdown
+              data={quantity}
+              onSelect={(selectedItem, index) => {
+                setSelectedQuantity(selectedItem)
+                console.log(selectedItem, index);
+              }}
+              defaultButtonText={"Quantity"}
+              defaultValue={quantity[0]}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                setSelectedQuantity(selectedItem)
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+              buttonStyle={{
+                borderRadius: 15,
+                marginHorizontal: 10,
+                width: 100,
+                backgroundColor: colors.primary,
+              }}
+              buttonTextStyle={{ color: colors.dark, fontWeight: "bold" }}
+            />
+            <SelectDropdown
+              data={collections}
+              onSelect={(selectedItem, index) => {
+                setSelectedCollection(selectedItem)
+                console.log(selectedItem.collectionName, index);
+              }}
+              defaultButtonText={"Choose a collection"}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                setSelectedCollection(selectedItem)
+                return selectedItem.collectionName;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item.collectionName;
+              }}
+              buttonStyle={{
+                borderRadius: 15,
+                marginHorizontal: 10,
+                width: 200,
+                backgroundColor: colors.primary,
+              }}
+              buttonTextStyle={{ color: colors.dark, fontWeight: "bold" }}
+            />
+          </View>
+          <StyledButton
+            title="Add to this collection"
+            onPress={addCardToCollection}
+            color={colors.dark}
+            disabled={false}
+          />
+          <StyledButton
+            title="Add to Wishlist"
+            onPress={() => {}}
+            color={colors.dark}
+            disabled={false}
+          />
         </>
-        )
+      );
     }
-    }
+  };
 
   return (
     <SafeAreaView style={styles.darkLargeContent}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible && selectedCard.id !==""}
+        visible={modalVisible && selectedCard.id !== ""}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
-          setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
+          setSelectedCard({
+            id: "",
+            name: "",
+            images: { small: "", large: "" },
+          });
           setModalVisible(!modalVisible);
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.darkTitleContent}>{selectedCard.name}</Text>
-            {selectedCard.id !== ""? getCard(): <></>}
-            <StyledButton color={colors.dark} title="Back" disabled={false} onPress={() => {
-                setSelectedCard({id: "", name: "", images: {small: "", large: ""}});
-                setModalVisible(!modalVisible)}}/>
+            {selectedCard.id !== "" ? getCard() : <></>}
+            <StyledButton
+              color={colors.dark}
+              title="Back"
+              disabled={false}
+              onPress={() => {
+                setSelectedCard({
+                  id: "",
+                  name: "",
+                  images: { small: "", large: "" },
+                });
+                setModalVisible(!modalVisible);
+              }}
+            />
           </View>
         </View>
       </Modal>

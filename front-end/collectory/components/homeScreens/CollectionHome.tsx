@@ -1,128 +1,238 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList, Modal, Alert, TextInput } from "react-native";
 import styles from "../styling/style";
-import React from "react";
+import React, { useEffect } from "react";
 import { getUserFromToken } from "../../services/userAPI";
 import CollectionButton from "../buttons/CollectionButton";
-import { getCollectionByUser } from "../../services/collectionApi";
+import {
+  getCollectionByUser,
+  getAllCardsInCollection,
+  createNewCollection,
+} from "../../services/collectionApi";
 import CardCollection from "../others/CardCollection";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../styling/colors";
+import StyledButton from "../buttons/StyledButton";
+import SelectDropdown from "react-native-select-dropdown";
 
 const CollectionHome = () => {
+  const [selectedCollection, setSelectedCollection] = React.useState<{
+    collectionId: number;
+    collectionName: string;
+  }>({ collectionId: 0, collectionName: "" });
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [collectionList, setCollectionList] = React.useState<any[]>([]);
 
-    const [collections, setCollections] = React.useState<any[]>([]);
-    const [user, setUser] = React.useState<any>();
-    const [selectedCollection, setSelectedCollection] = React.useState<{collectionId: number, collectionName: string}>({collectionId: 0, collectionName: ""});
+  const [collectionName, setCollectionName] = React.useState("");
+  const [licenseId, setLicenseId] = React.useState(0);
+  const [cardIdList, setCardIdList] = React.useState<string[]>([]);
 
-    React.useEffect(() => {
-        getUserFromToken()
-        .then((user) => {
-            console.log("user: " + JSON.stringify(user))
-            setUser(user)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }, [])  
+  const licenses = ["Pokémon", "Yu-Gi-Oh", "Magic The Gathering", "Naruto"];
 
+  const onPressCollection = (collectionId: number, nameCollection: string) => {
+   setSelectedCollection({
+      collectionId: collectionId,
+      collectionName: nameCollection,
+    });
+    getCardList(collectionId);
+    console.log("pressed");
+  };
 
-    const onPressCollection = (collectionId: number, nameCollection: string) => {
-        setSelectedCollection({collectionId: collectionId, collectionName: nameCollection})
-        console.log("pressed");
-    }
+  useEffect(() => {
+    fillScreen();
+  }, []);
 
-    const getCollections = () => {
-        getCollectionByUser(user.id)
-        .then((collections) => {
-            console.log("collections: " + JSON.stringify(collections))
-            setCollections(collections)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
+  const createCollection = () => {
+    getUserFromToken().then((user) => {
+      if (user !== undefined) {
+        createNewCollection(user.id, collectionName, licenseId)
+          .then((collection) => {
+            //console.log("collection: " + JSON.stringify(collection))
+            fillScreen();
+            setModalVisible(!modalVisible);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  };
 
-    const fillScreen = () => {
-        const components: JSX.Element[] = []
-        if (collections.length === 0) {
-            getCollections()
-        }
-        else {
-            collections.map((collection) => {
-                components.push(<CollectionButton collectionName={collection.name} onPress={() => onPressCollection(collection.id, collection.name)} />)
+  const fillScreen = () => {
+    getUserFromToken()
+      .then((user) => {
+        if (user !== undefined) {
+          //console.log("user: " + JSON.stringify(user));
+          getCollectionByUser(user.id)
+            .then((collections) => {
+              const components: JSX.Element[] = [];
+              if (collections === undefined) {
+                setCollectionList(["You don't have any collections yet."]);
+              } else {
+                setCollectionList(collections);
+              }
+              return components;
             })
-    }
-    return components
-    }
-
-    const getCardList = () => {
-        const cardsId: string[] = []
-        if (selectedCollection.collectionId === 1)
-        {
-            cardsId.push("ecard1-39")
-            cardsId.push("ex3-100")
-            cardsId.push("ex6-105")
-            cardsId.push("pl3-143")
-            cardsId.push("xyp-XY121")
-            cardsId.push("g1-RC5")
-            cardsId.push("sm12-22")
-            cardsId.push("smp-SM226")
-            cardsId.push("swsh4-25")
-            cardsId.push("swsh9-154")
-            cardsId.push("swsh11tg-TG03")
-            cardsId.push("sv3-223")
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          setCollectionList([
+            "You should been connected to see your collections.",
+          ]);
         }
-        else if (selectedCollection.collectionId === 2)
-        {
-            cardsId.push("base3-5")
-            cardsId.push("basep-39")
-            cardsId.push("ex13-31")
-            cardsId.push("pl1-83")
-            cardsId.push("hgss4-94")
-            cardsId.push("xy7-57")
-            cardsId.push("xyp-XY92")
-            cardsId.push("sm5-58")
-            cardsId.push("sm9-165")
-            cardsId.push("swshp-SWSH096")
-            cardsId.push("sv2-98")
-            cardsId.push("svp-4")
-        }
-        return cardsId
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getCardList = async (id: number) => {
+    const cardsId: string[] = [];
+
+    getAllCardsInCollection(id)
+      .then((cards) => {
+        cards.map(
+          (card: {
+            id: number;
+            collectionId: number;
+            cardId: string;
+            quantity: number;
+          }) => {
+            //cardsId.push(card.cardId);
+            console.log('ICI',card.cardId);
+            cardsId.push(card.cardId);
+          }
+          );
+          setCardIdList(cardsId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        //console.log("here: ", cardsId)
+  };
+
+  const switchScreen = () => {
+    if (selectedCollection.collectionId === 0) {
+      return (
+        <>
+          <Text style={styles.titleContent}>Welcome in your Collections</Text>
+          <View style={{ width: "100%", alignItems: "flex-end" }}>
+            <Icon
+              name="plus-circle"
+              size={40}
+              color={colors.dark}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                console.log("pressed");
+              }}
+            />
+          </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              fillScreen();
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.darkTitleContent}>
+                  Create New Collection
+                </Text>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Name of the collection"
+                  inputMode="text"
+                  textContentType="name"
+                  onChangeText={(text) => setCollectionName(text)}
+                />
+                <SelectDropdown
+                  data={licenses}
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index);
+                  }}
+                  defaultButtonText={"Quantity"}
+                  defaultValue={licenses[0]}
+                  buttonTextAfterSelection={(selectedItem, index) => {
+                    setLicenseId(index + 1);
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item, index) => {
+                    setLicenseId(index + 1);
+                    return item;
+                  }}
+                  buttonStyle={{
+                    borderRadius: 15,
+                    marginHorizontal: 10,
+                    width: 250,
+                    backgroundColor: colors.primary,
+                  }}
+                  buttonTextStyle={{ color: colors.dark, fontWeight: "bold" }}
+                />
+                <StyledButton
+                  color={colors.dark}
+                  title="Create"
+                  disabled={collectionName === ""}
+                  onPress={createCollection}
+                />
+
+                <StyledButton
+                  color={colors.dark}
+                  title="Back"
+                  disabled={false}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                />
+              </View>
+            </View>
+          </Modal>
+          <View style={styles.listContent}>
+            <FlatList
+              data={collectionList}
+              renderItem={({ item }) => {
+                if (typeof item === "string") {
+                  return <Text style={styles.textContent}>{item}</Text>;
+                } else {
+                  return (
+                    <CollectionButton
+                      key={item.id}
+                      collectionName={item.collectionName}
+                      onPress={() =>
+                        onPressCollection(item.id, item.collectionName)
+                      }
+                    />
+                  );
+                }
+              }}
+            />
+          </View>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Icon
+            name="keyboard-backspace"
+            size={40}
+            color={colors.dark}
+            onPress={() => {
+              setSelectedCollection({ collectionId: 0, collectionName: "" });
+            }}
+          />
+          <CardCollection
+            nameCollection={selectedCollection.collectionName}
+            cardIdList={cardIdList}
+          />
+        </>
+      );
     }
+  };
 
-    const switchScreen = () => {
-        if (selectedCollection.collectionId === 0) {
-            return (
-                <>
-             <Text style={styles.titleContent}>Welcome in your Collections</Text>
-             <View style={styles.content}>
-             {collections.length !== 0? <Text style={styles.titleContent}>Loading . . .</Text> : <>
-                 <CollectionButton collectionName="Charizard!" onPress={() => onPressCollection(1, "Charizard!")} />
-                 <CollectionButton collectionName="Cool Ghosts Squad" onPress={() => onPressCollection(2, "Cool Ghosts Squad")} />
-
-             </>
-             }
-             </View>
-
-         </>
-            )
-        }
-        else {
-            return (
-                <>
-                <Icon name='keyboard-backspace' size={40} color={colors.dark} onPress={() => {
-                    setSelectedCollection({collectionId: 0, collectionName: ""})
-                }}/>
-                <CardCollection nameCollection={selectedCollection.collectionName} cardIdList={getCardList()} />
-                </>
-            )
-        }
-    }
-
-
-
-    return (switchScreen())
-}
-
+  return switchScreen();
+};
 
 export default CollectionHome;

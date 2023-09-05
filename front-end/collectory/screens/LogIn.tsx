@@ -28,7 +28,7 @@ function LogIn({navigation}: LogInProps)
     } else return false;
   };
 
-  const onClickSLogIn = () => {
+  const onClickLogIn = () => {
     setErrorEmailFormat(false);
     setErrorNotGoodInfos(false);
     if (
@@ -96,7 +96,7 @@ function LogIn({navigation}: LogInProps)
             title="Log In"
             color={colors.secondary}
             disabled={checkInputsFilled()}
-            onPress={onClickSLogIn}
+            onPress={onClickLogIn}
           />
           <StyledButton
                     title="Sign Up"

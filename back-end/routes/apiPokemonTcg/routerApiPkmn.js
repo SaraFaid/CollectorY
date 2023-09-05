@@ -4,4 +4,5 @@ module.exports = (app) => {
     require ('./getCardsBySetId')(app);
     require ('./getAllSets')(app);
     require ('./getCardById')(app);
+    require ('./getListOfCards')(app);
 }
