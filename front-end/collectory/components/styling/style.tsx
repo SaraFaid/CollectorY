@@ -204,6 +204,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    //badge styles
+    quantityBadge: {
+        width: 30,
+        height: 30,
+        backgroundColor: colors.mint,
+        borderRadius: 15,
+        alignSelf: 'flex-end',
+        
+    },
+    quantityBadgeText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: colors.dark,
+    },
+
     // navbar styles
     backBar: {
         width: 'auto',
