@@ -7,6 +7,7 @@ module.exports = (app) => {
     require('./rolesUsers/routerRoleUser')(app);
     require('./apiPokemonTcg/routerApiPkmn')(app);
     require('./collections/routerCollection')(app);
+    require('./quantity/routerQuantity')(app);
     require('./cards/routerCard')(app);
     require('./posts/routerPost')(app);
 }

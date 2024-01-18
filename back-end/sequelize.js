@@ -6,6 +6,7 @@ const LicenseModel = require('./models/license');
 const PostModel = require('./models/post');
 const LikeModel = require('./models/like');
 const CardModel = require('./models/card');
+const QuantityModel = require('./models/quantity');
 const RoleModel = require('./models/role');
 const RoleUserModel = require('./models/roleUser');
 
@@ -16,6 +17,7 @@ const mockedRoles = require('./mock/mockedRoles');
 const mockedRolesUsers = require('./mock/mockedRolesUsers');
 const mockedCollections = require('./mock/mockedCollections');
 const mockedCards = require('./mock/mockedCards');
+const mockedQuantities = require('./mock/mockedQuantities');
 const mockedLicenses = require('./mock/mockedLicenses');
 const mockedPosts = require('./mock/mockedPosts');
 
@@ -41,6 +43,7 @@ const License = LicenseModel(sequelize, DataTypes);
 const Post = PostModel(sequelize, DataTypes);
 const Like = LikeModel(sequelize, DataTypes);
 const Card = CardModel(sequelize, DataTypes);
+const Quantity = QuantityModel(sequelize, DataTypes);
 const Role = RoleModel(sequelize, DataTypes);
 const RoleUser = RoleUserModel(sequelize, DataTypes);
 
@@ -64,6 +67,9 @@ License.hasMany(Collection, {foreignKey: 'licenseId' });
 
 Collection.hasMany(Card, {foreignKey: 'collectionId' });
 Card.belongsTo(Collection, {foreignKey: 'collectionId' });
+
+Card.hasMany(Quantity, {foreignKey: 'cardId' });
+Quantity.belongsTo(Card, {foreignKey: 'cardId' });
 
 User.hasMany(Post, {foreignKey: 'userId' });
 Post.belongsTo(User, {foreignKey: 'userId' });
@@ -103,6 +109,9 @@ const initDB = (synchronize) => {
             Card.bulkCreate(mockedCards)
         })
         .then(() => {
+            Quantity.bulkCreate(mockedQuantities)
+        })
+        .then(() => {
             Post.bulkCreate(mockedPosts)
             return "mocked data created"
         })
@@ -113,4 +122,4 @@ const initDB = (synchronize) => {
 }
 
 
-module.exports = { verifyConnection, initDB, User, Collection, License, Post, Like, Card, Role, RoleUser, Friend }   
+module.exports = { verifyConnection, initDB, User, Collection, License, Post, Like, Card, Quantity, Role, RoleUser, Friend }   

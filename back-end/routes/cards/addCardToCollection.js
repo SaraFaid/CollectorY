@@ -1,10 +1,12 @@
-const { Card } = require('../../sequelize');
+const { Card, Quantity } = require('../../sequelize');
 const { Op } = require('sequelize')
 
 module.exports = (app) => {
     app.post("/api/cards/add", async (req, res) => {
-        const { collectionId, cardId, quantity } = req.body;
-        console.log('collectionId', collectionId+' cardId', cardId+' quantity', quantity)
+        const { collectionId, cardId, quality, quantity } = req.body;
+        console.log('collectionId', collectionId+' cardId', cardId+' quality', quality+' quantity', quantity)
+
+
         const card = await Card.findOne({
             where: {
                 [Op.and]: [{ collectionId: collectionId }, { cardId: cardId }],
@@ -13,9 +15,26 @@ module.exports = (app) => {
         if (card) {
             const tmp = card.update({
                 quantity: quantity + card.quantity,
-            });
-            console.log('card exists', tmp);
-            return res.status(200).send(tmp);
+            })
+            .then(async (tmp) => {
+            
+            
+            const oldquantity = await Quantity.findOne({
+                where: 
+                    { cardId: card.id }}
+                    )
+            if(oldquantity) {
+                const qntt = oldquantity[quality]
+                const tmp2 = oldquantity.update({
+                    [quality]: qntt + quantity,
+                })
+                .then((tmp2) => {
+                    console.log('card exists', tmp+' quantity updated', tmp2);
+                    return res.status(200).send([tmp, tmp2]);
+                })
+            }
+        })
+
         }
         else {
             try {
@@ -23,8 +42,37 @@ module.exports = (app) => {
                     collectionId: collectionId,
                     cardId: cardId,
                     quantity: quantity,
-                });
-                res.status(200).send(newCard);
+                })
+                .then((newCard) => {
+                    const newQuantity = Quantity.create({
+                        cardId: newCard.id,
+                        mint: 0,
+                        nearMint: 0,
+                        excellent: 0,
+                        lightlyPlayed: 0,
+                        played: 0,
+                        poor: 0,
+                    })
+                    .then((newQuantity) => {
+                        newQuantity.update({
+                            [quality]: quantity,
+                        });
+                        console.log('new card and quantity created', newCard, newQuantity);
+                        return res.status(200).send([newCard, newQuantity]);
+                    })
+                    .catch((err) => {
+                        console.log('error creating quantity', err);
+                        return res.status(500).send({
+                            message: 'Internal server error',
+                        });
+                    });
+                })
+                .catch((err) => {
+                    console.log('error creating card', err);
+                    return res.status(500).send({
+                        message: 'Internal server error',
+                    });
+                })
             }
             catch (err) {
                 res.status(500).send({
