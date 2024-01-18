@@ -33,6 +33,7 @@ const CollectionHome = () => {
       collectionId: collectionId,
       collectionName: nameCollection,
     });
+    console.log("collection: " + JSON.stringify(selectedCollection));
     getCardList(collectionId);
     console.log("pressed");
   };
@@ -224,7 +225,7 @@ const CollectionHome = () => {
             }}
           />
           <CardCollection
-            nameCollection={selectedCollection.collectionName}
+            collection={selectedCollection}
             cardIdList={cardIdList}
           />
         </>

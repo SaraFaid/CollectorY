@@ -17,7 +17,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import StyledButton from "../buttons/StyledButton";
 import colors from "../styling/colors";
 import { getUserFromToken } from "../../services/userAPI";
-import { addCardInCollection } from "../../services/cardAPI";
+import { addCardInCollection } from "../../services/collectionApi";
 
 type CardsListProps = {
   idSet: string;
@@ -43,6 +43,7 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
 }[]>([]);
 
 const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
+const [selectedQuality, setSelectedQuality] = useState<string>("Mint");
 const [selectedCollection, setSelectedCollection] = useState<{
     id: number;
     userId: number;
@@ -53,6 +54,7 @@ const [selectedCollection, setSelectedCollection] = useState<{
 }>({id: 0, userId: 0, collectionName: "", licenseId: 0, createdAt: "", updatedAt: ""});
 
   const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const quality = ["Mint", "Near Mint", "Excellent", "Lightly Played", "Played", "Poor"];
 
   const requestCard = async () => {
     await getCardsFromSetID(idSet)
@@ -104,7 +106,7 @@ const [selectedCollection, setSelectedCollection] = useState<{
   };
 
   const addCardToCollection = () => {
-    addCardInCollection(selectedCollection.id, selectedCard.id, selectedQuantity)
+    addCardInCollection(selectedCollection.id, selectedCard.id, selectedQuality, selectedQuantity)
     .then((res) => {
       setModalVisible(false)
       console.log(res)
@@ -154,12 +156,37 @@ const [selectedCollection, setSelectedCollection] = useState<{
               }}
               buttonStyle={{
                 borderRadius: 15,
-                marginHorizontal: 10,
+                marginHorizontal: 5,
+                width: 55,
+                backgroundColor: colors.primary,
+              }}
+              buttonTextStyle={{ color: colors.dark, fontWeight: "bold" }}
+            />
+
+            <SelectDropdown
+              data={quality}
+              onSelect={(selectedItem, index) => {
+                setSelectedQuality(selectedItem)
+                console.log(selectedItem, index);
+              }}
+              defaultButtonText={"Quality"}
+              defaultValue={quality[0]}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                setSelectedQuality(selectedItem)
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+              buttonStyle={{
+                borderRadius: 15,
+                marginHorizontal: 5,
                 width: 100,
                 backgroundColor: colors.primary,
               }}
               buttonTextStyle={{ color: colors.dark, fontWeight: "bold" }}
             />
+
             <SelectDropdown
               data={collections}
               onSelect={(selectedItem, index) => {
@@ -176,7 +203,7 @@ const [selectedCollection, setSelectedCollection] = useState<{
               }}
               buttonStyle={{
                 borderRadius: 15,
-                marginHorizontal: 10,
+                marginHorizontal: 5,
                 width: 200,
                 backgroundColor: colors.primary,
               }}

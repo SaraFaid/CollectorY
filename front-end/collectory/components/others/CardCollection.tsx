@@ -12,36 +12,76 @@ import {
 import { getCardsList } from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "../cardLayouts/Card";
+import QuantityBadge from "./QuantityBadge";
+import { getAllCardsInCollection, getQuantity } from "../../services/collectionApi";
+import { stringify } from "qs";
 
 type CardCollectionProps = {
-  nameCollection: string;
+  collection:{
+    collectionId: number;
+    collectionName: string;
+};
   cardIdList: string[];
 };
 
-const CardCollection = ({ nameCollection, cardIdList }: CardCollectionProps) => {
+const CardCollection = ({ collection, cardIdList }: CardCollectionProps) => {
   const [cards, setCards] = React.useState<any[]>([]);
+  const [quantity, setQuantity] = React.useState<number[]>([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState<{id: string, name: string, images: {small: string, large: string}}>({id: "", name: "", images: {small: "", large: ""}});
+  const [collectionSelected, setCollectionSelected] = React.useState({collectionId: 0, collectionName: ""});
 
   
   const request =  () => {
 
-    getCardsList(cardIdList)
-    .then((list) => {
-      setCards(list)
-      }
-    )
+    setCollectionSelected(collection)
+    console.log(collection)
+    getAllCardsInCollection(collection.collectionId)
+    .then((res) => {
+      console.log("all the quantities " + JSON.stringify(res))
+      const list = res
+      if (list !== undefined) {
+        const quantityList: number[] = []
+        list.map((item: {cardId: string, quantity: number}) => {
+          quantityList.push(item.quantity)
+        })
+        console.log("quantityList: " + quantityList) 
+        if (quantityList !== quantity)
+        {
+          setQuantity(quantityList)
+        }
+    
+      getCardsList(cardIdList)
+    .then((res2) => {
+      console.log("all the cards " + res2)
+    //   if(list.length !== 0)
+    //   {
+    //     list.map((item, index) => {
+    //       item = {...item, quantity: quantity[index]}
+    //     })
+    // }
+    if (cards !== res2) {
+      setCards(res2)
+    }
+
+    })
       .catch((error) => {
         console.log(error);
       }
-    );  
+    );
+      }  
+    })
+    .catch((error) => {
+      console.log(error);
+    }
+  );
+
+    
   };
 
-  if (cards.length === 0) {
+  if (cards.length === 0 && quantity.length === 0) {
     // getCardsList(cardIdList);
     request()
-    
-
   }
 
   const showFullCard = (card: {id: string, name: string, images: {small: string, large: string}}) => {
@@ -64,7 +104,7 @@ const CardCollection = ({ nameCollection, cardIdList }: CardCollectionProps) => 
         return (
           <>
           <SafeAreaView style={styles.darkLargeContent}>
-          <Text style={styles.darkTitleContent}>{nameCollection}</Text>
+          <Text style={styles.darkTitleContent}>{collectionSelected.collectionName}</Text>
             <Text style={styles.darkTitleContent}>No cards in this collection.</Text>
             </SafeAreaView>
             </>)
@@ -96,12 +136,18 @@ const CardCollection = ({ nameCollection, cardIdList }: CardCollectionProps) => 
         </View>
         </View>
         </Modal>
-        <Text style={styles.darkTitleContent}>{nameCollection}</Text>
+        <Text style={styles.darkTitleContent}>{collectionSelected.collectionName}</Text>
         <FlatList
         data={cards}
         renderItem={({ item }) => (
+          <>
+          
           <Card card={item} onPress={() => showFullCard(item)} />
-          )}
+          <QuantityBadge color={0} quantity={item.quantity} />
+          
+        </>
+        )
+        }
           keyExtractor={(item) => item.id}
           numColumns={3}
           />
