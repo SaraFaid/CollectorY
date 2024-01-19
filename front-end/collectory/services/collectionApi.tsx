@@ -57,7 +57,7 @@ const createNewCollection = async (userId: number, collectionName: string, licen
     )
 }
 
-const addCardInCollection = async (collectionId: number, cardId: number, quality: string, quantity: number) => {
+const addCardInCollection = async (collectionId: number, cardId: string, quality: string, quantity: number) => {
     console.log("collectionId: " + collectionId + " cardId: " + cardId + " quality: " + quality + " quantity: " + quantity)
     const chosenQuality = quality === "Mint" ? "mint" : quality === "Near Mint" ? "nearMint" : quality === "Excellent" ? "excellent" : quality === "Lightly Played" ? "lightlyPlayed" : quality === "Played" ? "played" : "poor"
     return await axios.post(addNewCard, {collectionId: collectionId, cardId: cardId, quality: chosenQuality, quantity: quantity})

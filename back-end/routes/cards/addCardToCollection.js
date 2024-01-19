@@ -13,8 +13,12 @@ module.exports = (app) => {
             },
         });
         if (card) {
+            // const newQuantity = Number.parseInt(card.quantity) + quantity;
+            const previousQuantity = card[quantity]
+            // console.log('previousQuantity :', previousQuantity)
+            // console.log('quantity :', quantity)
             const tmp = card.update({
-                quantity: quantity + card.quantity,
+                [quantity]: previousQuantity + quantity,
             })
             .then(async (tmp) => {
             
