@@ -177,7 +177,7 @@ const CardCollection = ({ collection, cardIdList }: CardCollectionProps) => {
               renderItem={({ item, index }) => (
                 <>
                   <Card card={item} onPress={() => showFullCard(item)} />
-                  <QuantityBadge color={0} quantity={quantity[index]} />
+                  <QuantityBadge quantity={quantity[index]} />
                 </>
               )}
               keyExtractor={(item) => item.id}

@@ -5,36 +5,36 @@ import styles from '../styling/style';
 import colors from '../styling/colors';
 
 type QuantityBadgeProps = {
-  color: number;
+  // color: number;
   quantity: number;
 };
 
-const QuantityBadge = ({ color, quantity }: QuantityBadgeProps) => {
-  const qualityColor = (color: number) => {
-    switch (color) {
-      case 0:
-        return colors.mint;
-      case 1:
-        return colors.nearMint;
-      case 2:
-        return colors.excellent;
-      case 3:
-        return colors.lightPlayed;
-      case 4:
-        return colors.played;
-      case 5:
-        return colors.poor;
-      default:
-        return colors.mint;
-    }
-  }
+const QuantityBadge = ({ quantity }: QuantityBadgeProps) => {
+  // const qualityColor = (color: number) => {
+  //   switch (color) {
+  //     case 0:
+  //       return colors.mint;
+  //     case 1:
+  //       return colors.nearMint;
+  //     case 2:
+  //       return colors.excellent;
+  //     case 3:
+  //       return colors.lightPlayed;
+  //     case 4:
+  //       return colors.played;
+  //     case 5:
+  //       return colors.poor;
+  //     default:
+  //       return colors.mint;
+  //   }
+  // }
 
   //console.log(quantity);
 
   // , {backgroundColor: qualityColor(color)}
   return (
-    <View style={[styles.quantityBadge]}>
-      <Text style={styles.quantityBadgeText}>{quantity}</Text>
+    <View style={{backgroundColor: colors.mint, width: 20, maxHeight: 20, borderRadius: 15, alignContent: 'center',paddingVertical: 'auto', zIndex: 1, start: -15}}>
+      <Text style={{fontSize: 14, color: colors.dark, textAlign: 'center'}}>{quantity}</Text>
     </View>
   );
 };
