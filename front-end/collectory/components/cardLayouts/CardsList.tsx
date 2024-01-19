@@ -30,31 +30,59 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
   const [selectedCard, setSelectedCard] = useState<{
     id: string;
     name: string;
+    number: number;
+    set: { printedTotal: number; name: string; series: string };
     images: { small: string; large: string };
-  }>({ id: "", name: "", images: { small: "", large: "" } });
+    rarity: string;
+    artist: string;
+  }>({
+    id: "",
+    name: "",
+    number: 0,
+    set: { printedTotal: 0, name: "", series: "" },
+    images: { small: "", large: "" },
+    rarity: "",
+    artist: "",
+  });
 
-  const [collections, setCollections] = useState<{
+  const [collections, setCollections] = useState<
+    {
+      id: number;
+      userId: number;
+      collectionName: string;
+      licenseId: number;
+      createdAt: string;
+      updatedAt: string;
+    }[]
+  >([]);
+
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
+  const [selectedQuality, setSelectedQuality] = useState<string>("Mint");
+  const [selectedCollection, setSelectedCollection] = useState<{
     id: number;
     userId: number;
     collectionName: string;
     licenseId: number;
     createdAt: string;
     updatedAt: string;
-}[]>([]);
-
-const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
-const [selectedQuality, setSelectedQuality] = useState<string>("Mint");
-const [selectedCollection, setSelectedCollection] = useState<{
-    id: number;
-    userId: number;
-    collectionName: string;
-    licenseId: number;
-    createdAt: string;
-    updatedAt: string;
-}>({id: 0, userId: 0, collectionName: "", licenseId: 0, createdAt: "", updatedAt: ""});
+  }>({
+    id: 0,
+    userId: 0,
+    collectionName: "",
+    licenseId: 0,
+    createdAt: "",
+    updatedAt: "",
+  });
 
   const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  const quality = ["Mint", "Near Mint", "Excellent", "Lightly Played", "Played", "Poor"];
+  const quality = [
+    "Mint",
+    "Near Mint",
+    "Excellent",
+    "Lightly Played",
+    "Played",
+    "Poor",
+  ];
 
   const requestCard = async () => {
     await getCardsFromSetID(idSet)
@@ -73,32 +101,34 @@ const [selectedCollection, setSelectedCollection] = useState<{
   }
 
   const requestCollections = async () => {
-    let userId  = 0
+    let userId = 0;
     getUserFromToken()
-    .then((user) => {
-      if (user !== undefined) {
-        userId = user.id
-        getCollectionByUser(userId)
-          .then((list) => {
-            if (list !== undefined && list.length > 0) setCollections(list);
-            else setCollections([]);
-          })
-          .catch((error) => {
-            console.log(error);
-          }
-        );
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
+      .then((user) => {
+        if (user !== undefined) {
+          userId = user.id;
+          getCollectionByUser(userId)
+            .then((list) => {
+              if (list !== undefined && list.length > 0) setCollections(list);
+              else setCollections([]);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const showFullCard = (card: {
     id: string;
     name: string;
+    number: number;
+    set: { printedTotal: number; name: string; series: string };
     images: { small: string; large: string };
+    rarity: string;
+    artist: string;
   }) => {
     setSelectedCard(card);
     setModalVisible(true);
@@ -106,15 +136,19 @@ const [selectedCollection, setSelectedCollection] = useState<{
   };
 
   const addCardToCollection = () => {
-    addCardInCollection(selectedCollection.id, selectedCard.id, selectedQuality, selectedQuantity)
-    .then((res) => {
-      setModalVisible(false)
-      console.log(res)
-    }
+    addCardInCollection(
+      selectedCollection.id,
+      selectedCard.id,
+      selectedQuality,
+      selectedQuantity
     )
-    .catch((err) => {
-      console.log(err)
-    })
+      .then((res) => {
+        setModalVisible(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const getCard = () => {
@@ -142,13 +176,13 @@ const [selectedCollection, setSelectedCollection] = useState<{
             <SelectDropdown
               data={quantity}
               onSelect={(selectedItem, index) => {
-                setSelectedQuantity(selectedItem)
+                setSelectedQuantity(selectedItem);
                 console.log(selectedItem, index);
               }}
               defaultButtonText={"Quantity"}
               defaultValue={quantity[0]}
               buttonTextAfterSelection={(selectedItem, index) => {
-                setSelectedQuantity(selectedItem)
+                setSelectedQuantity(selectedItem);
                 return selectedItem;
               }}
               rowTextForSelection={(item, index) => {
@@ -166,13 +200,13 @@ const [selectedCollection, setSelectedCollection] = useState<{
             <SelectDropdown
               data={quality}
               onSelect={(selectedItem, index) => {
-                setSelectedQuality(selectedItem)
+                setSelectedQuality(selectedItem);
                 console.log(selectedItem, index);
               }}
               defaultButtonText={"Quality"}
               defaultValue={quality[0]}
               buttonTextAfterSelection={(selectedItem, index) => {
-                setSelectedQuality(selectedItem)
+                setSelectedQuality(selectedItem);
                 return selectedItem;
               }}
               rowTextForSelection={(item, index) => {
@@ -190,12 +224,12 @@ const [selectedCollection, setSelectedCollection] = useState<{
             <SelectDropdown
               data={collections}
               onSelect={(selectedItem, index) => {
-                setSelectedCollection(selectedItem)
+                setSelectedCollection(selectedItem);
                 console.log(selectedItem.collectionName, index);
               }}
               defaultButtonText={"Choose a collection"}
               buttonTextAfterSelection={(selectedItem, index) => {
-                setSelectedCollection(selectedItem)
+                setSelectedCollection(selectedItem);
                 return selectedItem.collectionName;
               }}
               rowTextForSelection={(item, index) => {
@@ -238,7 +272,11 @@ const [selectedCollection, setSelectedCollection] = useState<{
           setSelectedCard({
             id: "",
             name: "",
+            number: 0,
+            set: { printedTotal: 0, name: "", series: "" },
             images: { small: "", large: "" },
+            rarity: "",
+            artist: "",
           });
           setModalVisible(!modalVisible);
         }}
@@ -255,7 +293,11 @@ const [selectedCollection, setSelectedCollection] = useState<{
                 setSelectedCard({
                   id: "",
                   name: "",
+                  number: 0,
+                  set: { printedTotal: 0, name: "", series: "" },
                   images: { small: "", large: "" },
+                  rarity: "",
+                  artist: "",
                 });
                 setModalVisible(!modalVisible);
               }}
