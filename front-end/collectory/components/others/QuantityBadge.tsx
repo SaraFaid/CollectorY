@@ -29,8 +29,11 @@ const QuantityBadge = ({ color, quantity }: QuantityBadgeProps) => {
     }
   }
 
+  //console.log(quantity);
+
+  // , {backgroundColor: qualityColor(color)}
   return (
-    <View style={[styles.quantityBadge, {backgroundColor: qualityColor(color)}]}>
+    <View style={[styles.quantityBadge]}>
       <Text style={styles.quantityBadgeText}>{quantity}</Text>
     </View>
   );

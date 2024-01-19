@@ -206,12 +206,12 @@ const styles = StyleSheet.create({
 
     //badge styles
     quantityBadge: {
-        width: 30,
-        height: 30,
+        width: 50,
+        height: 50,
         backgroundColor: colors.mint,
         borderRadius: 15,
-        alignSelf: 'flex-end',
-        
+        alignItems: 'center',
+
     },
     quantityBadgeText: {
         fontSize: 14,
