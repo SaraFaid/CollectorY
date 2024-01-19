@@ -33,7 +33,7 @@ const QuantityBadge = ({ quantity }: QuantityBadgeProps) => {
 
   // , {backgroundColor: qualityColor(color)}
   return (
-    <View style={{backgroundColor: colors.mint, width: 20, maxHeight: 20, borderRadius: 15, borderColor: colors.secondary, borderWidth: 1, alignContent: 'center', zIndex: 1, start: -15}}>
+    <View style={{backgroundColor: colors.mint, minWidth: 20, maxHeight: 20, borderRadius: 15, borderColor: colors.secondary, borderWidth: 1, alignContent: 'center', zIndex: 1, start: -15}}>
       <Text style={{fontSize: 14, color: colors.dark, textAlign: 'center', marginVertical: 'auto'}}>{quantity}</Text>
     </View>
   );
