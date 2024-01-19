@@ -33,7 +33,7 @@ const CollectionHome = () => {
       collectionId: collectionId,
       collectionName: nameCollection,
     });
-    console.log("collection: " + JSON.stringify(selectedCollection));
+    console.log("collection selected: " + JSON.stringify(selectedCollection));
     getCardList(collectionId);
     console.log("pressed");
   };
