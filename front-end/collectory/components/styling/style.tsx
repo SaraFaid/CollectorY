@@ -207,19 +207,17 @@ const styles = StyleSheet.create({
     //badge styles
     quantityBadge: {
         borderCurve: 15,
-        width: 20,
-        height: 20,
+        height: 30,
         backgroundColor: colors.mint,
-        zIndex: 1,
-        margin: 10,
-        
-
     },
     quantityBadgeText: {
-        margin: 5,
+        marginHorizontal: 5,
+        marginBottom: 10,
         fontSize: 14,
         fontWeight: 'bold',
         color: colors.dark,
+        position: 'absolute',
+        
     },
 
     // navbar styles
@@ -280,7 +278,11 @@ const styles = StyleSheet.create({
 
     // cards styles
     pressableCard: {
-        width: '33%',
+        width: '25%',
+        margin: 0,
+        padding: 0,
+        alignItems: 'stretch',
+        zIndex: 0,
 
     },
     card: {
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
         height: 145,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        margin: 5,
+        marginVertical: 5,
     },
     largeCard: {
         width: 145,
@@ -328,6 +330,18 @@ const styles = StyleSheet.create({
     },
     hiddensetText: {
         display: 'none',
+    },
+
+    //flatlist
+    flatList: {
+        width: '100%',
+        marginTop: 20,
+    },
+
+    flatListColumn: {
+        width: '100%',
+        justifyContent: 'center',
+        alignContent: 'center',
     },
 
     // modal

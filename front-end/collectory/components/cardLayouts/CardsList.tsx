@@ -310,10 +310,12 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
         <FlatList
           data={cards}
           renderItem={({ item }) => (
-            <Card card={item} onPress={() => showFullCard(item)} />
+            <Card card={item} onPress={() => showFullCard(item)} margin={10} />
           )}
           keyExtractor={(item) => item.id}
           numColumns={3}
+          style={styles.flatList}
+          columnWrapperStyle={styles.flatListColumn}
         />
       ) : (
         <Text style={styles.darkTitleContent}>Loading . . .</Text>

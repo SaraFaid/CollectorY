@@ -182,6 +182,8 @@ const CardCollection = ({ collection, cardIdList }: CardCollectionProps) => {
               )}
               keyExtractor={(item) => item.id}
               numColumns={3}
+              style={[styles.flatList, {marginLeft: 7}]}
+              columnWrapperStyle={styles.flatListColumn}
             />
           </SafeAreaView>
         </>
