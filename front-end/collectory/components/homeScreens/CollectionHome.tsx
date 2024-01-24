@@ -33,6 +33,7 @@ const CollectionHome = () => {
       collectionId: collectionId,
       collectionName: nameCollection,
     });
+    console.log("collection selected: " + JSON.stringify(selectedCollection));
     getCardList(collectionId);
     console.log("pressed");
   };
@@ -221,10 +222,11 @@ const CollectionHome = () => {
             color={colors.dark}
             onPress={() => {
               setSelectedCollection({ collectionId: 0, collectionName: "" });
+              console.log("pressed : " + JSON.stringify(selectedCollection));
             }}
           />
           <CardCollection
-            nameCollection={selectedCollection.collectionName}
+            collection={selectedCollection}
             cardIdList={cardIdList}
           />
         </>

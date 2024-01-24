@@ -2,7 +2,7 @@ module.exports = [
     {
         collectionId: 1,
         cardId: 'dp3-4',
-        quantity: 1 
+        quantity: 1
     },
     {
         collectionId: 1,
@@ -72,7 +72,7 @@ module.exports = [
     {
         collectionId: 3,
         cardId: 'basep-39',
-        quantity: 1
+        quantity: 1 
     },
     {
         collectionId: 3,

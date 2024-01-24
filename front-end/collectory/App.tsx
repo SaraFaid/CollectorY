@@ -5,12 +5,14 @@ import MainHome from './screens/MainHome';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LogBox } from 'react-native';
 
 
 export default function App() {
 
 
   const Stack = createNativeStackNavigator();
+  LogBox.ignoreAllLogs();
 
   return (
     <NavigationContainer>

@@ -14,7 +14,7 @@ type MainHomeProps = {
 };
 
 function MainHome({ navigation, route }: MainHomeProps) {
-  const [selected, setSelected] = React.useState("collectory");
+  const [selected, setSelected] = React.useState("cards");
 
   const userLogged = route.params?.user;
   //console.log(userLogged);
@@ -75,14 +75,6 @@ function MainHome({ navigation, route }: MainHomeProps) {
   return (
     <View style={styles.container}>
       <View style={styles.backBar}>
-        {userLogged.collectory?
-
-          <LogoButton
-          name="collectory"
-          selected={selected === "collectory"}
-          onPress={() => onPress("collectory")}
-          />
-        : <></>}
         <LogoButton
           name="cards"
           selected={selected === "cards"}
@@ -98,6 +90,14 @@ function MainHome({ navigation, route }: MainHomeProps) {
           selected={selected === "profile"}
           onPress={() => onPress("profile")}
         />
+        {userLogged.collectory?
+
+<LogoButton
+name="collectory"
+selected={selected === "collectory"}
+onPress={() => onPress("collectory")}
+/>
+: <></>}
       </View>
       <View style={styles.safeAreaViewContent}>
         {fillScreen(selected, userLogged, navigation)}

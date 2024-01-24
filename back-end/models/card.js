@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         quantity: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+                type: DataTypes.INTEGER,
+                allowNull: false
         },
     })
 }

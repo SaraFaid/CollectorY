@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAllCardInCollection, getCollectionByUserId, addNewCollection, addCardToCollection } from "./routesAPI";
+import { getAllCardInCollection, getCollectionByUserId, addNewCollection, addNewCard, getQuantityByCardId } from "./routesAPI";
 
 
 const getAllCardsInCollection = async (collectionId: number) => {
@@ -57,8 +57,10 @@ const createNewCollection = async (userId: number, collectionName: string, licen
     )
 }
 
-const addCardInCollection = async (collectionId: number, cardId: number) => {
-    return await axios.post(addCardToCollection, {collectionId: collectionId, cardId: cardId})
+const addCardInCollection = async (collectionId: number, cardId: string, quality: string, quantity: number) => {
+    console.log("collectionId: " + collectionId + " cardId: " + cardId + " quality: " + quality + " quantity: " + quantity)
+    const chosenQuality = quality === "Mint" ? "mint" : quality === "Near Mint" ? "nearMint" : quality === "Excellent" ? "excellent" : quality === "Lightly Played" ? "lightlyPlayed" : quality === "Played" ? "played" : "poor"
+    return await axios.post(addNewCard, {collectionId: collectionId, cardId: cardId, quality: chosenQuality, quantity: quantity})
     .then(
         (res) => {
             return res.data
@@ -72,4 +74,26 @@ const addCardInCollection = async (collectionId: number, cardId: number) => {
     )
 }
 
-export {getAllCardsInCollection, getCollectionByUser, createNewCollection, addCardInCollection}
+const getQuantity = async (cardId : number) => {
+    return await axios.get(getQuantityByCardId + cardId)
+    .then(
+        (res) => {
+            console.log("all the quantities: " + JSON.stringify(res.data))
+            if(res.data.length === 0) {
+                return undefined
+            }
+            else {
+                const cardQuantity: {id: number, cardId: number, mint: number, nearMint: number, excellent: number, lightlyPlayed: number, played: number, poor: number, createdAt: string, updatedAt: string}[] = res.data
+                return cardQuantity
+            }
+        }
+    )
+    .catch(
+        (err) => {
+            console.log(err)
+            return undefined
+            }
+    )
+}
+
+export {getAllCardsInCollection, getCollectionByUser, createNewCollection, addCardInCollection, getQuantity}
