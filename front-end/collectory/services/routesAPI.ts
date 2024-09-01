@@ -1,4 +1,4 @@
-export const baseUrl = 'http://192.168.68.121:5000/api'
+export const baseUrl = 'http://192.168.68.111:5000/api'
 
 // Users
 export const isUserExisting = `${baseUrl}/users/`
@@ -16,12 +16,15 @@ export const getListOfCards = `${baseUrl}/pokemon/cardList`
 // Collections
 export const getCollectionByUserId = `${baseUrl}/collections/users/`
 export const getAllCardInCollection = `${baseUrl}/cards/collection/`
+export const getWishlistByUserId = `${baseUrl}/collections/wishlist/`
 export const addNewCollection = `${baseUrl}/collections/create`
 export const getQuantityByCardId = `${baseUrl}/quantity/`
 
+
 // Cards
 export const addNewCard = `${baseUrl}/cards/add`
-// export const updateCard = `${baseUrl}/cards/update`
+export const removeCardFromCollection = `${baseUrl}/cards/remove`
+export const findCardInCollection = `${baseUrl}/cards/find`
 
 // Posts
 export const getPostsForLoggedUser = `${baseUrl}/posts/`
