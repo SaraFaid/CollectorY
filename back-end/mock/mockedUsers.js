@@ -23,4 +23,10 @@ module.exports = [
         "username": "Alex",
         "collectory": false
     },
+    {
+        "emailAddress": "uwu.uwu@owo.be",
+        "passwordDigest": "$argon2id$v=19$m=65536,t=3,p=4$OLl4dR0JaX4amtFQwrt2Qw$ckaRFucjPDykS2bKd6gEYrZ9TkWj6tzX5E1hJoEjm0Q",
+        "username": "Wolfie",
+        "collectory": false
+    },
 ]
