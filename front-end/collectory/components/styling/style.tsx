@@ -268,17 +268,17 @@ const styles = StyleSheet.create({
     },
     postTextImage: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         lineHeight: 21,
         fontWeight: 'bold',
         textAlign: 'center',
         backgroundColor: '#000000c0',
-        width: '100%',
+        width: '105%',
     },
 
     // cards styles
     pressableCard: {
-        width: '25%',
+        width: '30%',
         margin: 0,
         padding: 0,
         alignItems: 'stretch',
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
         height: 145,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginVertical: 5,
+        marginVertical: 2,
     },
     largeCard: {
         width: 145,
@@ -336,12 +336,14 @@ const styles = StyleSheet.create({
     flatList: {
         width: '100%',
         marginTop: 20,
+        alignSelf: 'center',
     },
 
     flatListColumn: {
-        width: '100%',
+        width: '90%',
         justifyContent: 'center',
         alignContent: 'center',
+        alignSelf: 'center',
     },
 
     // modal
