@@ -1,19 +1,20 @@
 // UI for the login in the application
 
 import { NavigationProp } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, View } from "react-native";
 import StyledButton from "../components/buttons/StyledButton";
 import colors from "../components/styling/colors";
 import styles from "../components/styling/style";
-import { LogUserIn } from "../services/userAPI";
+import { LogUserIn, LogUserOut } from "../services/userAPI";
+// import * as SecureStore from "expo-secure-store";
+// import { isTokenExpired } from "../services/userAPI";
 
 type LogInProps = {
-  navigation: NavigationProp<any,any>
-}
+  navigation: NavigationProp<any, any>;
+};
 
-function LogIn({navigation}: LogInProps) 
-{
+function LogIn({ navigation }: LogInProps) {
   // variables useStates
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +22,30 @@ function LogIn({navigation}: LogInProps)
   // variables error
   const [errorEmailFormat, setErrorEmailFormat] = useState(false);
   const [errorNotGoodInfos, setErrorNotGoodInfos] = useState(false);
+
+  // functions
+  // useEffect(() => {
+  //   SecureStore.getItemAsync("accessToken").then((res) => {
+  //     if (res) {
+  //       const token = SecureStore.getItemAsync("accessToken")
+  //         .then((res2) => {
+  //           if (isTokenExpired(res2)) {
+  //             LogUserOut();
+  //           } else {
+  //             const user = SecureStore.getItemAsync("user").then((user) => {
+  //               if (user) {
+  //                 console.log("user: ", JSON.parse(user));
+  //                 navigation.navigate("MainHome", { user: JSON.parse(user) });
+  //               }
+  //             });
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   });
+  // }, []);
 
   const checkInputsFilled = () => {
     if (email === "" || password === "") {
@@ -40,11 +65,12 @@ function LogIn({navigation}: LogInProps)
         if (res) {
           setEmail("");
           setPassword("");
-        navigation.navigate("MainHome", {user: res});
-      } else {
-        setErrorNotGoodInfos(true);
-      } 
-      })
+          console.log("res: ", res);
+          navigation.navigate("MainHome", { user: res });
+        } else {
+          setErrorNotGoodInfos(true);
+        }
+      });
     }
   };
 
@@ -65,15 +91,13 @@ function LogIn({navigation}: LogInProps)
             defaultValue={email}
             onChangeText={(text) => setEmail(text)}
           />
-          {
-            errorEmailFormat ? (
-                <Text style={styles.errorTextInput}>
-                    Email address is not valid
-                </Text>
-                ) : (
-                <></>
-                )
-          }
+          {errorEmailFormat ? (
+            <Text style={styles.errorTextInput}>
+              Email address is not valid
+            </Text>
+          ) : (
+            <></>
+          )}
           <TextInput
             style={styles.textInput}
             placeholder="Password"
@@ -83,15 +107,13 @@ function LogIn({navigation}: LogInProps)
             defaultValue={password}
             onChangeText={(text) => setPassword(text)}
           />
-          {
-            errorNotGoodInfos ? (
-                <Text style={styles.errorTextInput}>
-                    Email address or password is not correct
-                </Text>
-                ) : (
-                <></>
-                )
-          }
+          {errorNotGoodInfos ? (
+            <Text style={styles.errorTextInput}>
+              Email address or password is not correct
+            </Text>
+          ) : (
+            <></>
+          )}
           <StyledButton
             title="Log In"
             color={colors.secondary}
@@ -99,16 +121,15 @@ function LogIn({navigation}: LogInProps)
             onPress={onClickLogIn}
           />
           <StyledButton
-                    title="Sign Up"
-                    color={colors.dark}
-                    disabled={false}
-                    onPress={() => navigation.navigate("SignUp")}
-                />
+            title="Sign Up"
+            color={colors.dark}
+            disabled={false}
+            onPress={() => navigation.navigate("SignUp")}
+          />
         </View>
       </View>
     </View>
   );
 }
-
 
 export default LogIn;
