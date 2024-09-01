@@ -6,23 +6,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        mint: {
-            type : DataTypes.INTEGER,
-            allowNull: true
-        },
-        nearMint: {
-            type : DataTypes.INTEGER,
-            allowNull: true
-        },
         excellent: {
             type : DataTypes.INTEGER,
             allowNull: true
         },
         lightlyPlayed: {
-            type : DataTypes.INTEGER,
-            allowNull: true
-        },
-        played: {
             type : DataTypes.INTEGER,
             allowNull: true
         },

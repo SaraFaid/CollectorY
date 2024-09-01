@@ -22,11 +22,10 @@ type ProfileHomeProps = {
 
 const ProfileHome = ({user, nav}: ProfileHomeProps) => {
 
-    const userLogged = JSON.parse(JSON.stringify(user))
     const [selectedButton, setSelectedButton] = React.useState<string>("")
+    const userLogged = JSON.parse(JSON.stringify(user))
 
-
-
+    // TODO: simplify this function
     const isAdministrator = () => {
         const rights: boolean[] = []
         userLogged.roles.forEach((role: any) => {

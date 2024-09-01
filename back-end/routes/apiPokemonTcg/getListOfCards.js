@@ -6,19 +6,33 @@ module.exports = (app) => {
   app.get("/api/pokemon/cardList", verifyToken, (req, res) => {
     const  list  = req.query.list;
     const cardList = [];
-    if (list !== undefined && list.length !== 0) {
-    list.map((cardId) => {
-     const temp = getCardById(cardId)
+    
+    if (list !== undefined && list.length > 0) {
+      if (typeof(list) === "string") {
+        const temp = getCardById(list)
         .then((card) => {
           cardList.push(card.data.data);
-          if (cardList.length === list.length) {
-            res.json(cardList);
-          }
+          res.json(cardList);
         })
         .catch((err) => {
           console.log(err);
         });
-      });
+      }
+      else if (typeof(list) === "object") {
+        list.map((cardId) => {
+          // TODO: sort cards by date and id to get them in order + SETS
+          const temp = getCardById(cardId)
+            .then((card) => {
+              cardList.push(card.data.data);
+              if (cardList.length === list.length) {
+                res.json(cardList);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      }
     }
   });
 };

@@ -12,11 +12,14 @@ import {
 import { getCardByID} from "../../services/pokemonAPI";
 import styles from "../styling/style";
 import Card from "../cardLayouts/Card";
+import { findWishlistByUserId, getAllCardsInCollection } from "../../services/collectionApi";
+import { getUserFromToken } from "../../services/userAPI";
 
 const Wishlist = () => {
   const [cards, setCards] = React.useState<any[]>([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState<{id: string, name: string, images: {small: string, large: string}}>({id: "", name: "", images: {small: "", large: ""}});
+  const [cardIdList, setCardIdList] = React.useState<string[]>([]);
 
   const cardsId = ["dpp-DP52", "sma-SV25", "sv1-208", "bwp-BW73", "xyp-XY45", "neo4-12", "bw11-81"]
 
@@ -32,9 +35,64 @@ const Wishlist = () => {
     })
 };
 
+// get wishlist id from user id
+const getWishlistId = async (id: number) => {
+  const wishlistId = findWishlistByUserId(id)
+    .then((wishlist) => {
+      if (wishlist === undefined) {
+        console.log("No wishlist found");
+        return 0;}
+        else {
+          return wishlist[0].id;
+        }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return wishlistId;
+}
+
+const getCardList = async (id: number) => {
+  const cardsId: string[] = [];
+
+  getWishlistId(id)
+  .then((wishlistId) => {
+
+  getAllCardsInCollection(wishlistId)
+    .then((cards) => {
+      cards.map(
+        (card: {
+          id: number;
+          collectionId: number;
+          cardId: string;
+          quantity: number;
+        }) => {
+          //cardsId.push(card.cardId);
+          // console.log('ICI',card.cardId);
+          cardsId.push(card.cardId);
+        }
+        );
+        setCardIdList(cardsId);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  );
+      //console.log("here: ", cardsId)
+};
+
 
   if (cards.length === 0) {
-    request();
+    getUserFromToken()
+      .then((user) => {
+        if (user !== undefined) {
+          getCardList(user.id);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const showFullCard = (card: {id: string, name: string, images: {small: string, large: string}}) => {

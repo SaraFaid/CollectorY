@@ -1,5 +1,9 @@
 module.exports = [
     {
+        "id": 0,
+        "licenseName": "All"
+    },
+    {
         "id": 1,
         "licenseName": "Pokémon"
     },
