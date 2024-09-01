@@ -24,10 +24,16 @@ module.exports = (app) => {
                 passwordDigest: hash,
                 collectory: collectory,
             });
+            const wishlist = Collection.create({
+                userId: newUser.id,
+                collectionName: newUser.username + "'s wishlist",
+                licenseId: 0,
+            });
             res.status(200).send(newUser);
         })
 
         } catch (err) {
+            console.log(err);
             // internal failure
         }
     }
