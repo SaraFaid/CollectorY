@@ -97,6 +97,8 @@ const ExchangeDemand = () => {
     //          )}
     // }
 
+    // TODO: rewrite this whole shit
+
     const card1 = {id: "smp-SM198", name: "Bulbasaur", images: {
         small: "https://images.pokemontcg.io/smp/SM198.png"}}
 

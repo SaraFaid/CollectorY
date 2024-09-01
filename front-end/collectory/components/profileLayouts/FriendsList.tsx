@@ -5,6 +5,8 @@ import colors from "../styling/colors";
 import styles from "../styling/style";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
+//TODO: add and remote friends list buttons
+
 const FriendsList = () => {
   const [friends, setFriends] = React.useState<{
     id: number;

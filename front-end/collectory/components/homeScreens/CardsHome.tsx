@@ -9,6 +9,7 @@ import styles from "../styling/style";
 
 const CardsHome = () => {
 
+    // TODO: merge all the usestate to one and only usestate with the name of the license
     const [isPokemonPressed, setIsPokemonPressed] = React.useState(false);
     const [isYugiohPressed, setIsYugiohPressed] = React.useState(false);
     const [isMagicPressed, setIsMagicPressed] = React.useState(false);
