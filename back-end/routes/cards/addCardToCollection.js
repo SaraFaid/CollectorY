@@ -4,8 +4,7 @@ const { Op } = require('sequelize')
 module.exports = (app) => {
     app.post("/api/cards/add", async (req, res) => {
         const { collectionId, cardId, quality, quantity } = req.body;
-        console.log('collectionId', collectionId+' cardId', cardId+' quality', quality+' quantity', quantity)
-
+        // console.log('collectionId', collectionId+' cardId', cardId+' quality', quality+' quantity', quantity)
 
         const card = await Card.findOne({
             where: {
@@ -14,11 +13,12 @@ module.exports = (app) => {
         });
         if (card) {
             // const newQuantity = Number.parseInt(card.quantity) + quantity;
-            const previousQuantity = card[quantity]
             // console.log('previousQuantity :', previousQuantity)
             // console.log('quantity :', quantity)
+            const oldQntt = parseInt(card.quantity)
+            console.log('oldQuantity :', oldQntt)
             const tmp = card.update({
-                [quantity]: previousQuantity + quantity,
+                quantity: oldQntt + parseInt(quantity),
             })
             .then(async (tmp) => {
             
@@ -28,9 +28,9 @@ module.exports = (app) => {
                     { cardId: card.id }}
                     )
             if(oldquantity) {
-                const qntt = oldquantity[quality]
+                const qntt = parseInt(oldquantity[quality])
                 const tmp2 = oldquantity.update({
-                    [quality]: qntt + quantity,
+                    [quality]: qntt + parseInt(quantity),
                 })
                 .then((tmp2) => {
                     console.log('card exists', tmp+' quantity updated', tmp2);
