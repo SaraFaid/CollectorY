@@ -18,6 +18,7 @@ import StyledButton from "../buttons/StyledButton";
 import colors from "../styling/colors";
 import { getUserFromToken } from "../../services/userAPI";
 import { addCardInCollection } from "../../services/collectionApi";
+import { findWishlistByUserId } from "../../services/collectionApi";
 
 type CardsListProps = {
   idSet: string;
@@ -73,16 +74,10 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
     createdAt: "",
     updatedAt: "",
   });
+  let userId = 0;
 
   const quantity = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  const quality = [
-    "Mint",
-    "Near Mint",
-    "Excellent",
-    "Lightly Played",
-    "Played",
-    "Poor",
-  ];
+  const quality = ["Excellent", "Lightly Played", "Poor"];
 
   const requestCard = async () => {
     await getCardsFromSetID(idSet)
@@ -101,13 +96,13 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
   }
 
   const requestCollections = async () => {
-    let userId = 0;
     getUserFromToken()
       .then((user) => {
         if (user !== undefined) {
           userId = user.id;
           getCollectionByUser(userId)
             .then((list) => {
+              // console.log(list);
               if (list !== undefined && list.length > 0) setCollections(list);
               else setCollections([]);
             })
@@ -151,11 +146,41 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
       });
   };
 
+  const addCardToWishlist = () => {
+    getUserFromToken()
+      .then((user) => {
+        if (user !== undefined) {
+          userId = user.id;
+          findWishlistByUserId(userId)
+            .then((res) => {
+              if (res === undefined) {
+                console.log("No wishlist found");
+              } else {
+                addCardInCollection(
+                  res[0].id,
+                  selectedCard.id,
+                  "poor",
+                  1
+                ).catch((err) => {
+                  console.log(err);
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const getCard = () => {
     if (selectedCard.images.large === undefined) return <></>;
     else {
       const image = selectedCard.images.large;
-      //console.log(selectedCard.images.large)
+      //console.log(selectedCard);
       return (
         <>
           <Image
@@ -170,14 +195,18 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
           <Text style={styles.darkTextContent}>
             {selectedCard.set.name} - {selectedCard.set.series} Set
           </Text>
-          <Text style={styles.darkTextContent}>{selectedCard.rarity}</Text>
+          {selectedCard.rarity !== undefined ? (
+            <Text style={styles.darkTextContent}>{selectedCard.rarity}</Text>
+          ) : (
+            <></>
+          )}
           <Text style={styles.darkTextContent}>{selectedCard.artist}</Text>
           <View style={styles.viewRow}>
             <SelectDropdown
               data={quantity}
               onSelect={(selectedItem, index) => {
                 setSelectedQuantity(selectedItem);
-                console.log(selectedItem, index);
+                // console.log(selectedItem, index);
               }}
               defaultButtonText={"Quantity"}
               defaultValue={quantity[0]}
@@ -201,7 +230,7 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
               data={quality}
               onSelect={(selectedItem, index) => {
                 setSelectedQuality(selectedItem);
-                console.log(selectedItem, index);
+                // console.log(selectedItem, index);
               }}
               defaultButtonText={"Quality"}
               defaultValue={quality[0]}
@@ -225,7 +254,7 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
               data={collections}
               onSelect={(selectedItem, index) => {
                 setSelectedCollection(selectedItem);
-                console.log(selectedItem.collectionName, index);
+                // console.log(selectedItem.collectionName, index);
               }}
               defaultButtonText={"Choose a collection"}
               buttonTextAfterSelection={(selectedItem, index) => {
@@ -252,7 +281,7 @@ const CardsList = ({ idSet, nameSet }: CardsListProps) => {
           />
           <StyledButton
             title="Add to Wishlist"
-            onPress={() => {}}
+            onPress={addCardToWishlist}
             color={colors.dark}
             disabled={false}
           />
